@@ -1,5 +1,5 @@
 ﻿//
-//  Copyright (C) 2015 Fluendo S.A.
+//  Copyright (C) 2015 andoni
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -15,23 +15,43 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
-using System;
-using System.Collections.Generic;
-using Couchbase.Lite;
-using LongoMatch.Core.Store.Templates;
+using NUnit.Framework;
+using VAS.Core.Common;
+using VAS;
 
-namespace VAS.DB.Views
+namespace VAS.Tests.Core
 {
-	public class TeamsView: GenericView <Team>
+	[TestFixture ()]
+	public class TestResources
 	{
-		public TeamsView (CouchbaseStorage storage) : base (storage)
+
+		[TestFixtureSetUp ()]
+		public void Setup ()
 		{
+			Config.dataDir = "./data/";
 		}
 
-		protected override string ViewVersion {
-			get {
-				return "1";
-			}
+		[Test ()]
+		public void TestLoadIconResource ()
+		{
+			Image img = VAS.Core.Resources.LoadImage ("longomatch-dark-bg.svg");
+			Assert.IsNotNull (img);
+		}
+
+		[Test ()]
+		public void TestLoadImageResource ()
+		{
+			Image img = VAS.Core.Resources.LoadImage ("longomatch.svg");
+			Assert.IsNotNull (img);
+		}
+
+		[Test ()]
+		public void TestLoadInvalidResource ()
+		{
+			Assert.Throws<GLib.GException> (
+				delegate {
+					var img = VAS.Core.Resources.LoadImage ("not-found.svg");
+				});
 		}
 	}
 }

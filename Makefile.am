@@ -16,6 +16,12 @@ SUBDIRS = \
 	VAS.Core \
 	VAS.DB \
 	VAS.UI.Helpers.Gtk2 \
+	VAS.Core \
+	VAS.DB \
+	VAS.Drawing.Cairo \
+	VAS.Multimedia \
+	VAS.Services \
+	Weavers \
 	po
 
 

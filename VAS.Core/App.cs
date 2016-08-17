@@ -172,7 +172,7 @@ namespace VAS
 			Catalog.SetDomain (softwareName.ToLower (), localesDir);
 		}
 
-		public Config Config {
+		public IConfig Config {
 			get;
 			set;
 		}

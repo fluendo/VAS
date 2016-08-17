@@ -30,7 +30,7 @@ namespace VAS
 {
 	[Serializable]
 	[JsonConverter (typeof(VASConverter))]
-	public abstract class Config : BindableBase
+	public abstract class Config : BindableBase, IConfig
 	{
 		public void Save ()
 		{

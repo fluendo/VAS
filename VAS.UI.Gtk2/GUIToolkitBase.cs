@@ -114,6 +114,7 @@ namespace VAS.UI
 
 		public virtual void Quit ()
 		{
+			App.Current.StateController.EmptyStateStack ().GetAwaiter ().GetResult ();
 			Log.Information ("Quit application");
 			Gtk.Application.Quit ();
 		}

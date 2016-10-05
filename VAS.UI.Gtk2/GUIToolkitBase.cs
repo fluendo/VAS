@@ -112,9 +112,9 @@ namespace VAS.UI
 
 		public abstract bool SelectMediaFiles (MediaFileSet fileSet);
 
-		public virtual void Quit ()
+		public virtual async Task Quit ()
 		{
-			App.Current.StateController.EmptyStateStack ().GetAwaiter ().GetResult ();
+			await App.Current.StateController.EmptyStateStack ();
 			Log.Information ("Quit application");
 			Gtk.Application.Quit ();
 		}

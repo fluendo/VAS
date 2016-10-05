@@ -41,8 +41,7 @@ namespace VAS.Core.Interfaces.GUI
 
 		bool FullScreen { set; }
 
-		void Quit ();
-
+		Task Quit ();
 
 		List<EditionJob> ConfigureRenderingJob (Playlist playlist);
 

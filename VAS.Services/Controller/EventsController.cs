@@ -42,6 +42,7 @@ namespace VAS.Services.Controller
 		{
 			App.Current.EventsBroker.Subscribe<LoadTimelineEvent<TModel>> (HandleOpenEvent);
 			App.Current.EventsBroker.Subscribe<LoadTimelineEvent<IEnumerable<TModel>>> (HandleOpenListEvent);
+			App.Current.EventsBroker.Subscribe<UpdateFilterEvent> (HandleUpdateFilterEvent);
 		}
 
 		public virtual void Stop ()
@@ -81,6 +82,10 @@ namespace VAS.Services.Controller
 		void HandleOpenListEvent (LoadTimelineEvent<IEnumerable<TModel>> e)
 		{
 			playerVM.LoadEvents (e.Object.OfType<TimelineEvent> ().ToList (), e.Playing);
+		}
+
+		protected virtual void HandleUpdateFilterEvent (UpdateFilterEvent e)
+		{
 		}
 	}
 }

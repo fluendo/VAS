@@ -368,4 +368,16 @@ namespace VAS.Core.Events
 		public string Name { get; set; }
 
 	}
+
+	/// <summary>
+	/// Event sent to notify about a filter update.
+	/// </summary>
+	public class UpdateFilterEvent : Event
+	{
+		/// <summary>
+		/// Gets or sets the list of filters.
+		/// </summary>
+		/// <value>The filters.</value>
+		public IEnumerable<string> Filter { get; set; }
+	}
 }

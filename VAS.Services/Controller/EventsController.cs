@@ -34,7 +34,11 @@ namespace VAS.Services.Controller
 		where TModel : TimelineEvent
 		where TViewModel : TimelineEventVM<TModel>, new()
 	{
-		PlayerVM playerVM;
+
+		public PlayerVM PlayerVM {
+			get;
+			set;
+		}
 
 		#region IController implementation
 
@@ -54,7 +58,7 @@ namespace VAS.Services.Controller
 		public virtual void SetViewModel (IViewModel viewModel)
 		{
 			if (viewModel is IAnalysisViewModel) {
-				playerVM = (PlayerVM)(viewModel as IAnalysisViewModel).PlayerViewModel;
+				PlayerVM = (PlayerVM)(viewModel as IAnalysisViewModel).PlayerViewModel;
 			}
 		}
 
@@ -76,12 +80,12 @@ namespace VAS.Services.Controller
 
 		void HandleOpenEvent (LoadTimelineEvent<TModel> e)
 		{
-			playerVM.LoadEvent (e.Object, e.Playing);
+			PlayerVM.LoadEvent (e.Object, e.Playing);
 		}
 
 		void HandleOpenListEvent (LoadTimelineEvent<IEnumerable<TModel>> e)
 		{
-			playerVM.LoadEvents (e.Object.OfType<TimelineEvent> ().ToList (), e.Playing);
+			PlayerVM.LoadEvents (e.Object.OfType<TimelineEvent> ().ToList (), e.Playing);
 		}
 
 		protected virtual void HandleUpdateFilterEvent (UpdateFilterEvent e)

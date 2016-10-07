@@ -253,15 +253,18 @@ namespace VAS.Core
 		/// Empties the state stack.
 		/// </summary>
 		/// <returns>The state stack.</returns>
-		public async Task EmptyStateStack ()
+		public async Task<bool> EmptyStateStack ()
 		{
 			await PopAllModalStates ();
-			navigationStateStack.ForEach (async (x) => {
-				await x.ScreenState.PostTransition ();
-				x.ScreenState.Dispose ();
-			});
+			foreach (var navigationState in navigationStateStack) {
+				if (!await navigationState.ScreenState.PostTransition ()) {
+					return false;
+				}
+				navigationState.ScreenState.Dispose ();
+			}
 			navigationStateStack.Clear ();
 			overwrittenTransitions.Clear ();
+			return true;
 		}
 
 		Task<bool> PushNavigationState (string transition, IScreenState state)

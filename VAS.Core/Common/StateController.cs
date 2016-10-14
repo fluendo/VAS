@@ -95,7 +95,7 @@ namespace VAS.Core
 				return await PushNavigationState (transition, state);
 			} catch (Exception ex) {
 				Log.Exception (ex);
-				return false;
+				throw;
 			}
 		}
 

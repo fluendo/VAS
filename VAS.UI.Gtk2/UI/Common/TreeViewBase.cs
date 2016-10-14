@@ -23,6 +23,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using Gtk;
+using VAS.Core.Interfaces.GUI;
 using VAS.Core.Interfaces.MVVMC;
 
 namespace VAS.UI.Common
@@ -34,7 +35,7 @@ namespace VAS.UI.Common
 	/// </summary>
 	public class TreeViewBase<TCollectionViewModel, TModel, TViewModel> : TreeView, IView<TCollectionViewModel>
 		where TCollectionViewModel : class, INestedViewModel<TViewModel>
-		where TViewModel: class, IViewModel<TModel>, new()
+		where TViewModel : class, IViewModel<TModel>, new()
 	{
 		protected const int COL_DATA = 0;
 		protected TreeStore store;
@@ -48,7 +49,7 @@ namespace VAS.UI.Common
 		protected TViewModel activatedViewModel;
 		protected Menu menu;
 
-		public TreeViewBase () : this (new TreeStore (typeof(TViewModel)))
+		public TreeViewBase () : this (new TreeStore (typeof (TViewModel)))
 		{
 		}
 
@@ -115,7 +116,7 @@ namespace VAS.UI.Common
 
 			case NotifyCollectionChangedAction.Move:
 				break;
-				
+
 			case NotifyCollectionChangedAction.Replace:
 				break;
 			}
@@ -254,7 +255,7 @@ namespace VAS.UI.Common
 			TreeIter iter;
 			List<TViewModel> selected = new List<TViewModel> ();
 
-			foreach (var path in Selection.GetSelectedRows()) {
+			foreach (var path in Selection.GetSelectedRows ()) {
 				Model.GetIterFromString (out iter, path.ToString ());
 				TViewModel selectedViewModel = Model.GetValue (iter, COL_DATA) as TViewModel;
 				if (selectedViewModel != null) {
@@ -294,8 +295,8 @@ namespace VAS.UI.Common
 
 		protected virtual bool HandleFilter (TreeModel model, TreeIter iter)
 		{
-			// FIXME: Implement a generic filter for all TViewModels
-			return true;
+			IVisible vm = model.GetValue (iter, 0) as IVisible;
+			return (vm?.Visible ?? true);
 		}
 
 		#endregion

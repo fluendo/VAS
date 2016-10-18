@@ -25,7 +25,6 @@ using VAS.Core.Hotkeys;
 using VAS.Core.Interfaces;
 using VAS.Core.Interfaces.Multimedia;
 using VAS.Core.Interfaces.MVVMC;
-using VAS.Core.Services;
 using VAS.Core.Services.ViewModel;
 using VAS.Core.Store;
 using VAS.Core.Store.Playlists;
@@ -89,16 +88,16 @@ namespace VAS.Services
 				StartNextJob ();
 		}
 
-		public void RetryJobs (JobCollectionVM retryJobs)
+		public void RetryJobs (RangeObservableCollection<JobVM> retryJobs)
 		{
-			foreach (Job job in retryJobs.Model) {
-				if (!jobs.Model.Contains (job))
+			foreach (JobVM job in retryJobs) {
+				if (!jobs.Model.Contains (job.Model))
 					return;
-				if (!pendingJobs.Model.Contains (job)) {
+				if (!pendingJobs.Model.Contains (job.Model)) {
 					job.State = JobState.NotStarted;
-					jobs.Model.Remove (job);
-					jobs.Model.Add (job);
-					pendingJobs.Model.Add (job);
+					jobs.Model.Remove (job.Model);
+					jobs.Model.Add (job.Model);
+					pendingJobs.Model.Add (job.Model);
 					UpdateJobsStatus ();
 				}
 			}
@@ -115,7 +114,7 @@ namespace VAS.Services
 			jobs.Model.RemoveAll (j => j.State == JobState.Finished);
 		}
 
-		public void CancelJobs (JobCollectionVM cancelJobs)
+		public void CancelJobs (RangeObservableCollection<JobVM> cancelJobs)
 		{
 			foreach (JobVM job in cancelJobs) {
 				job.State = JobState.Cancelled;

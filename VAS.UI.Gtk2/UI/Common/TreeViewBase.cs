@@ -34,7 +34,7 @@ namespace VAS.UI.Common
 	/// <summary>
 	/// Tree view base implementation for MVVM.
 	/// </summary>
-	public class TreeViewBase<TCollectionViewModel, TModel, TViewModel> : TreeView, IView<TCollectionViewModel>
+	public class TreeViewBase<TCollectionViewModel, TModel, TViewModel> : Gtk.TreeView, IView<TCollectionViewModel>
 		where TCollectionViewModel : class, INestedViewModel<TViewModel>
 		where TViewModel : class, IViewModel<TModel>, new()
 	{

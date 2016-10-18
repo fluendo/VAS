@@ -16,6 +16,7 @@
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
 using System;
+using VAS.Core.Common;
 using VAS.Core.Services.ViewModel;
 
 namespace VAS.Core.Events
@@ -26,11 +27,11 @@ namespace VAS.Core.Events
 
 	public class RetrySelectedJobsEvent : Event
 	{
-		public JobCollectionVM Jobs { get; set; }
+		public RangeObservableCollection<JobVM> Jobs { get; set; }
 	}
 
 	public class CancelSelectedJobsEvent : Event
 	{
-		public JobCollectionVM Jobs { get; set; }
+		public RangeObservableCollection<JobVM> Jobs { get; set; }
 	}
 }

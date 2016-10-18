@@ -15,22 +15,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 // 
-using System.Collections.Generic;
 using VAS.Core.Common;
-using VAS.Core.Interfaces.MVVMC;
 using VAS.Core.Services.ViewModel;
 
 namespace VAS.Core.Interfaces
 {
 	public interface IRenderingJobsControler
 	{
-		void RetryJobs (JobCollectionVM retryJobs);
+		void RetryJobs (RangeObservableCollection<JobVM> retryJobs);
 
 		void DeleteJob (JobVM job);
 
 		void ClearDoneJobs ();
 
-		void CancelJobs (JobCollectionVM cancelJobs);
+		void CancelJobs (RangeObservableCollection<JobVM> cancelJobs);
 
 		void CancelCurrentJob ();
 

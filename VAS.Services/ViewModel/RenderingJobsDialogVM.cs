@@ -25,14 +25,29 @@ namespace VAS.Services.ViewModel
 {
 	public class RenderingJobsDialogVM : IViewModel
 	{
-		public JobCollectionVM JobCollectionVM { get; set; }
+		JobCollectionVM jobCollectionVM;
+
+		public JobCollectionVM JobCollectionVM {
+			get {
+				return jobCollectionVM;
+			}
+			set {
+				if (jobCollectionVM != null) {
+					jobCollectionVM.Selection.CollectionChanged -= OnSelectionChanged;
+				}
+				jobCollectionVM = value;
+				if (jobCollectionVM != null) {
+					jobCollectionVM.Selection.CollectionChanged += OnSelectionChanged;
+				}
+			}
+		}
+
 		public bool CancelButtonVisible { get; set; }
 		public bool RetryButtonVisible { get; set; }
 
 		public RenderingJobsDialogVM ()
 		{
-			JobCollectionVM = new JobCollectionVM ();
-			JobCollectionVM.Selection.CollectionChanged += OnSelectionChanged;
+			//JobCollectionVM = new JobCollectionVM ();
 			CancelButtonVisible = false;
 			RetryButtonVisible = false;
 		}

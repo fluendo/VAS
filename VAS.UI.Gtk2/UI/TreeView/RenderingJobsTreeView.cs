@@ -59,5 +59,11 @@ namespace VAS.UI.TreeView
 			JobVM jobVM = model.GetValue (iter, 0) as JobVM;
 			(cell as Gtk.CellRendererPixbuf).Pixbuf = IconLoader.LoadIcon (this, jobVM.StateIconName, IconSize.Button);
 		}
+
+		protected override void HandleViewModelPropertyChanged (object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			base.HandleViewModelPropertyChanged (sender, e);
+			QueueDraw ();
+		}
 	}
 }

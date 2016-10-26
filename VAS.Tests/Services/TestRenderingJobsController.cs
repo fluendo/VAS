@@ -94,7 +94,7 @@ namespace VAS.Tests.Services
 				PlaylistPlayElement element = new PlaylistPlayElement (evt);
 				job.Playlist.Elements.Add (element);
 
-				renderer.AddJob (new JobVM { Model = job });
+				renderer.AddJob (job);
 
 				// Check that AddSegment is called with the right video file.
 				editorMock.Verify (m => m.AddSegment (p.FileSet [0].FilePath,
@@ -108,7 +108,7 @@ namespace VAS.Tests.Services
 				element = new PlaylistPlayElement (evt);
 				job.Playlist.Elements [0] = element;
 				job.State = JobState.NotStarted;
-				renderer.AddJob (new JobVM { Model = job });
+				renderer.AddJob (job);
 				editorMock.Verify (m => m.AddSegment (p.FileSet [1].FilePath,
 					evt.Start.MSeconds, evt.Stop.MSeconds, evt.Rate, evt.Name, true, new Area ()), Times.Once ());
 
@@ -120,7 +120,7 @@ namespace VAS.Tests.Services
 				element = new PlaylistPlayElement (evt);
 				job.Playlist.Elements [0] = element;
 				job.State = JobState.NotStarted;
-				renderer.AddJob (new JobVM { Model = job });
+				renderer.AddJob (job);
 				editorMock.Verify (m => m.AddSegment (p.FileSet [0].FilePath,
 					evt.Start.MSeconds, evt.Stop.MSeconds, evt.Rate, evt.Name, true, new Area ()), Times.Once ());
 			} finally {
@@ -143,7 +143,7 @@ namespace VAS.Tests.Services
 			AddTimelineEvent (job.Playlist, 86000, 90000, file1);
 			AddTimelineEvent (job.Playlist, 0, 0, "Does not exists");
 
-			renderer.AddJob (new JobVM { Model = job });
+			renderer.AddJob (job);
 
 			editorMock.Verify (m => m.AddSegment (file1, 30000, 1000, 1, null, false, new Area ()));
 			editorMock.Verify (m => m.AddSegment (file2, 10000, 5000, 1, null, false, new Area ()));
@@ -166,7 +166,7 @@ namespace VAS.Tests.Services
 			evt.Drawings.Add (new FrameDrawing { Render = new Time (2000) });
 			evt.Drawings.Add (new FrameDrawing { Render = new Time (8000) });
 
-			renderer.AddJob (new JobVM { Model = job });
+			renderer.AddJob (job);
 
 			editorMock.Verify (m => m.AddSegment (file1, 0, 2000, 1, null, false, new Area ()));
 			editorMock.Verify (m => m.AddImageSegment (It.IsAny<string> (), 0, 5000, null, new Area ()));

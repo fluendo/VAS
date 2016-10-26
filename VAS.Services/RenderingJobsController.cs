@@ -31,7 +31,7 @@ using VAS.Core.Store.Playlists;
 
 namespace VAS.Services
 {
-	public class RenderingJobsController : IRenderingJobsControler, IController
+	public class RenderingJobsController : IRenderingJobsController, IController
 	{
 		/* List of pending jobs */
 		JobCollectionVM jobs, pendingJobs;
@@ -77,12 +77,12 @@ namespace VAS.Services
 			Disposed = true;
 		}
 
-		public void AddJob (JobVM job)
+		public void AddJob (Job job)
 		{
 			if (job == null)
 				return;
-			jobs.Model.Add (job.Model);
-			pendingJobs.Model.Add (job.Model);
+			jobs.Model.Add (job);
+			pendingJobs.Model.Add (job);
 			UpdateJobsStatus ();
 			if (pendingJobs.Count () == 1)
 				StartNextJob ();
@@ -90,7 +90,7 @@ namespace VAS.Services
 
 		public void RetryJobs (RangeObservableCollection<JobVM> retryJobs)
 		{
-			foreach (JobVM job in retryJobs) {
+			foreach (JobVM job in retryJobs.ToList ()) {
 				if (!jobs.Model.Contains (job.Model))
 					return;
 				if (!pendingJobs.Model.Contains (job.Model)) {
@@ -288,14 +288,14 @@ namespace VAS.Services
 				if (image_path == null) {
 					continue;
 				}
-				videoEditor.AddSegment (file.FilePath, lastTS.MSeconds,
-					fd.Render.MSeconds - lastTS.MSeconds,
-					element.Rate, play.Name, file.HasAudio, roi);
+				videoEditor.AddSegment (file.FilePath, (lastTS + file.Offset).MSeconds,
+										fd.Render.MSeconds - lastTS.MSeconds,
+										element.Rate, play.Name, file.HasAudio, roi);
 				// Drawings have already been cropped to ROI by the canvas, we pass an empty area
 				videoEditor.AddImageSegment (image_path, 0, fd.Pause.MSeconds, play.Name, new Area ());
 				lastTS = fd.Render;
 			}
-			videoEditor.AddSegment (file.FilePath, lastTS.MSeconds,
+			videoEditor.AddSegment (file.FilePath, (lastTS + file.Offset).MSeconds,
 				play.Stop.MSeconds - lastTS.MSeconds,
 				element.Rate, play.Name, file.HasAudio, roi);
 			return true;
@@ -308,7 +308,7 @@ namespace VAS.Services
 
 			capturer = App.Current.MultimediaToolkit.GetFramesCapturer ();
 			capturer.Open (file.FilePath);
-			frame = capturer.GetFrame (drawing.Render, true, (int)file.DisplayVideoWidth, (int)file.DisplayVideoHeight);
+			frame = capturer.GetFrame (drawing.Render + file.Offset, true, (int)file.DisplayVideoWidth, (int)file.DisplayVideoHeight);
 			capturer.Dispose ();
 			if (frame == null) {
 				Log.Error (String.Format ("Could not get frame for file {0} at pos {1}",
@@ -366,7 +366,7 @@ namespace VAS.Services
 		{
 			try {
 				pendingJobs.Model.Remove (currentJob.Model);
-			} catch {
+			} catch (Exception ex) {
 			}
 		}
 
@@ -428,7 +428,7 @@ namespace VAS.Services
 			App.Current.EventsBroker.Subscribe<CancelSelectedJobsEvent> (HandleCancelSelectedJobsEvent);
 			App.Current.EventsBroker.Subscribe<ConvertVideoFilesEvent> ((e) => {
 				ConversionJob job = new ConversionJob (e.Files, e.Settings);
-				AddJob (new JobVM { Model = job });
+				AddJob (job);
 			});
 			status = ControllerStatus.Started;
 		}

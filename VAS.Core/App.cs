@@ -30,7 +30,7 @@ namespace VAS
 		public Registry DependencyRegistry;
 
 		public IStorageManager DatabaseManager;
-		public IRenderingJobsManager RenderingJobsManger;
+		public IRenderingJobsController RenderingJobsController;
 
 		public ViewLocator ViewLocator;
 		public ControllerLocator ControllerLocator;

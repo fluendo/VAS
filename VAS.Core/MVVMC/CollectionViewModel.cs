@@ -31,7 +31,7 @@ namespace VAS.Core.MVVMC
 	/// for selecting items within the collection.
 	/// </summary>
 	public class CollectionViewModel<TModel, TViewModel> : NestedViewModel<TViewModel>
-		where TViewModel: IViewModel<TModel>, new()
+		where TViewModel : IViewModel<TModel>, new()
 	{
 		bool editing;
 		ObservableCollection<TModel> model;
@@ -121,7 +121,7 @@ namespace VAS.Core.MVVMC
 			switch (e.Action) {
 			case NotifyCollectionChangedAction.Add:
 				foreach (TModel model in e.NewItems) {
-					AddViewModel (model); 
+					AddViewModel (model);
 				}
 				break;
 			case NotifyCollectionChangedAction.Remove:

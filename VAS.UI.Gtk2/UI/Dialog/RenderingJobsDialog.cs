@@ -22,23 +22,17 @@ using VAS.Core.Hotkeys;
 using VAS.Core.Interfaces.GUI;
 using VAS.Core.Interfaces.MVVMC;
 using VAS.Core.MVVMC;
+using VAS.Core.Services.ViewModel;
+using VAS.Services.State;
 using VAS.Services.ViewModel;
 
 namespace VAS.UI.Dialog
 {
-	[ViewAttribute ("RenderingJobs")]
+	[ViewAttribute (RenderingJobsDialogState.NAME)]
+	[Category ("VAS")]
+	[ToolboxItem (false)]
 	public partial class RenderingJobsDialog : Gtk.Dialog, IView<RenderingJobsDialogVM>, IPanel
 	{
-		public RenderingJobsDialog (Window parent)
-		{
-			TransientFor = parent;
-			this.Build ();
-			//this.manager = App.Current.RenderingJobsManger;
-			cancelbutton.Clicked += OnCancelbuttonClicked;
-			clearbutton.Clicked += OnClearbuttonClicked;
-			retrybutton.Clicked += OnRetrybuttonClicked;
-		}
-
 		public RenderingJobsDialogVM ViewModel {
 			get {
 				return viewModel;
@@ -46,16 +40,20 @@ namespace VAS.UI.Dialog
 			set {
 				if (ViewModel != null) {
 					viewModel.PropertyChanged -= HandleViewModelChanged;
-					//ViewModel.JobCollectionVM.Selection.CollectionChanged -= OnSelectionChanged;
 				}
 				viewModel = value;
 				renderingjobstreeview2.SetViewModel (viewModel.JobCollectionVM);
 				ViewModel.PropertyChanged += HandleViewModelChanged;
-				//ViewModel.JobCollectionVM.Selection.CollectionChanged += OnSelectionChanged;
 			}
 		}
 
 		RenderingJobsDialogVM viewModel;
+
+		public RenderingJobsDialog ()
+		{
+			this.Build ();
+			ConnectSignals ();
+		}
 
 		public KeyContext GetKeyContext ()
 		{
@@ -92,25 +90,39 @@ namespace VAS.UI.Dialog
 				break;
 
 			case "CancelButtonVisible":
-				cancelbutton.Visible = ViewModel.RetryButtonVisible;
+				cancelbutton.Visible = ViewModel.CancelButtonVisible;
 				cancelbutton.QueueDraw ();
 				break;
 			}
 		}
 
-		protected void OnClearbuttonClicked (object sender, System.EventArgs e)
+		void ConnectSignals ()
+		{
+			cancelbutton.Clicked += OnCancelbuttonClicked;
+			clearbutton.Clicked += OnClearbuttonClicked;
+			retrybutton.Clicked += OnRetrybuttonClicked;
+			buttonOk.Clicked += OnOkbuttonClicked;
+		}
+
+		void OnClearbuttonClicked (object sender, System.EventArgs e)
 		{
 			ViewModel.ClearDoneJobs ();
 		}
 
-		protected void OnCancelbuttonClicked (object sender, System.EventArgs e)
+		void OnCancelbuttonClicked (object sender, System.EventArgs e)
 		{
 			ViewModel.CancelSelectedJobs ();
 		}
 
-		protected void OnRetrybuttonClicked (object sender, System.EventArgs e)
+		void OnRetrybuttonClicked (object sender, System.EventArgs e)
 		{
 			ViewModel.RetrySelectedJobs ();
+		}
+
+		void OnOkbuttonClicked (object sender, System.EventArgs e)
+		{
+			this.Hide ();
+			this.Destroy ();
 		}
 	}
 }

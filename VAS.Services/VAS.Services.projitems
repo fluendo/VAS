@@ -38,6 +38,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\RenderingStateBarVM.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RenderingJobsController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\RenderingJobsDialogVM.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)State\RenderingJobsDialogState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)ViewModel\" />

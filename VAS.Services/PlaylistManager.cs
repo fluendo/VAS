@@ -236,8 +236,10 @@ namespace VAS.Services
 			List<EditionJob> jobs = App.Current.GUIToolkit.ConfigureRenderingJob (e.Playlist);
 			if (jobs == null)
 				return;
-			foreach (Job job in jobs)
-				App.Current.RenderingJobsController.AddJob (job);
+			foreach (Job job in jobs) {
+				App.Current.RenderingJobsManger?.AddJob (job);
+				App.Current.RenderingJobsController?.AddJob (job);
+			}
 		}
 
 		protected virtual void HandleTogglePlayEvent (TogglePlayEvent e)

@@ -247,7 +247,7 @@ namespace VAS.Services
 		{
 			Time lastTS;
 			TimelineEvent play;
-			MediaFile file;
+			MediaFile file = null;
 			IEnumerable<FrameDrawing> drawings;
 			int cameraIndex;
 			Area roi;
@@ -266,7 +266,9 @@ namespace VAS.Services
 			if (cameraIndex >= element.Play.FileSet.Count) {
 				Log.Error (string.Format ("Camera index={0} not matching for current fileset count={1}",
 					cameraIndex, element.Play.FileSet.Count));
-				file = element.Play.FileSet [0];
+				//Fix crash rendering when no video
+				if (element.Play.FileSet.Count > 0)
+					file = element.Play.FileSet [0];
 			} else {
 				file = element.Play.FileSet [cameraIndex];
 			}

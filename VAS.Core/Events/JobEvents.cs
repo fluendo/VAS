@@ -30,7 +30,7 @@ namespace VAS.Core.Events
 		public RangeObservableCollection<JobVM> Jobs { get; set; }
 	}
 
-	public class CancelSelectedJobsEvent : Event
+	public class CancelJobsEvent : Event
 	{
 		public RangeObservableCollection<JobVM> Jobs { get; set; }
 	}

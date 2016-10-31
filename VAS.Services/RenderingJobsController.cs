@@ -267,8 +267,9 @@ namespace VAS.Services
 				Log.Error (string.Format ("Camera index={0} not matching for current fileset count={1}",
 					cameraIndex, element.Play.FileSet.Count));
 				//Fix crash rendering when no video
-				if (element.Play.FileSet.Count > 0)
+				if (element.Play.FileSet.Count > 0) {
 					file = element.Play.FileSet [0];
+				}
 			} else {
 				file = element.Play.FileSet [cameraIndex];
 			}
@@ -368,7 +369,7 @@ namespace VAS.Services
 		{
 			try {
 				pendingJobs.Model.Remove (currentJob.Model);
-			} catch (Exception ex) {
+			} catch {
 			}
 		}
 
@@ -427,7 +428,7 @@ namespace VAS.Services
 			}
 			App.Current.EventsBroker.Subscribe<ClearDoneJobsEvent> (HandleClearDoneJobsEvent);
 			App.Current.EventsBroker.Subscribe<RetrySelectedJobsEvent> (HandleRetrySelectedJobsEvent);
-			App.Current.EventsBroker.Subscribe<CancelSelectedJobsEvent> (HandleCancelSelectedJobsEvent);
+			App.Current.EventsBroker.Subscribe<CancelJobsEvent> (HandleCancelSelectedJobsEvent);
 			App.Current.EventsBroker.Subscribe<ConvertVideoFilesEvent> ((e) => {
 				ConversionJob job = new ConversionJob (e.Files, e.Settings);
 				AddJob (job);
@@ -442,7 +443,7 @@ namespace VAS.Services
 			}
 			App.Current.EventsBroker.Unsubscribe<ClearDoneJobsEvent> (HandleClearDoneJobsEvent);
 			App.Current.EventsBroker.Unsubscribe<RetrySelectedJobsEvent> (HandleRetrySelectedJobsEvent);
-			App.Current.EventsBroker.Unsubscribe<CancelSelectedJobsEvent> (HandleCancelSelectedJobsEvent);
+			App.Current.EventsBroker.Unsubscribe<CancelJobsEvent> (HandleCancelSelectedJobsEvent);
 			status = ControllerStatus.Stopped;
 		}
 
@@ -466,7 +467,7 @@ namespace VAS.Services
 			RetryJobs (e.Jobs);
 		}
 
-		protected void HandleCancelSelectedJobsEvent (CancelSelectedJobsEvent e)
+		protected void HandleCancelSelectedJobsEvent (CancelJobsEvent e)
 		{
 			CancelJobs (e.Jobs);
 		}

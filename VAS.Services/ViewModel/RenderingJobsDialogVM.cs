@@ -47,7 +47,6 @@ namespace VAS.Services.ViewModel
 
 		public RenderingJobsDialogVM ()
 		{
-			//JobCollectionVM = new JobCollectionVM ();
 			CancelButtonVisible = false;
 			RetryButtonVisible = false;
 		}
@@ -63,8 +62,8 @@ namespace VAS.Services.ViewModel
 
 		public void CancelSelectedJobs ()
 		{
-			this.PublishEvent<CancelSelectedJobsEvent> (
-				new CancelSelectedJobsEvent {
+			this.PublishEvent<CancelJobsEvent> (
+				new CancelJobsEvent {
 					Sender = this,
 					Jobs = JobCollectionVM.Selection
 				});
@@ -86,8 +85,9 @@ namespace VAS.Services.ViewModel
 			CancelButtonVisible = false;
 			RetryButtonVisible = false;
 
-			if (JobCollectionVM.Selection.Count == 0)
+			if (JobCollectionVM.Selection.Count == 0) {
 				return;
+			}
 
 			var jobVM = JobCollectionVM.Selection [0];
 

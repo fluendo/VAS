@@ -25,12 +25,6 @@ namespace VAS.Core.Common
 	[Serializable]
 	public class Job : StorableBase
 	{
-		public Job (EncodingSettings encSettings)
-		{
-			EncodingSettings = encSettings;
-			State = JobState.NotStarted;
-		}
-
 		public string Name {
 			get {
 				return System.IO.Path.GetFileName (EncodingSettings.OutputFile);
@@ -63,6 +57,30 @@ namespace VAS.Core.Common
 		public EncodingSettings EncodingSettings {
 			get;
 			set;
+		}
+
+		public Guid Guid {
+			get;
+		}
+
+		public Job (EncodingSettings encSettings)
+		{
+			EncodingSettings = encSettings;
+			State = JobState.NotStarted;
+			Guid = Guid.NewGuid ();
+		}
+
+		public override int GetHashCode ()
+		{
+			return Guid.GetHashCode ();
+		}
+
+		public override bool Equals (object obj)
+		{
+			if (obj is Job) {
+				return (obj as Job).Guid.Equals (Guid);
+			}
+			return false;
 		}
 	}
 

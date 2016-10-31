@@ -215,7 +215,8 @@ namespace VAS.Services
 				element = new PlaylistPlayElement (play);
 				playlist.Elements.Add (element);
 				job = new EditionJob (playlist, settings);
-				App.Current.RenderingJobsManger.AddJob (job);
+				App.Current.RenderingJobsManger?.AddJob (job);
+				App.Current.RenderingJobsController?.AddJob (job);
 			} catch (Exception ex) {
 				Log.Exception (ex);
 			}

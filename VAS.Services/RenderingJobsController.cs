@@ -25,14 +25,13 @@ using VAS.Core.Hotkeys;
 using VAS.Core.Interfaces;
 using VAS.Core.Interfaces.Multimedia;
 using VAS.Core.Interfaces.MVVMC;
-using VAS.Core.Services;
 using VAS.Core.Services.ViewModel;
 using VAS.Core.Store;
 using VAS.Core.Store.Playlists;
 
 namespace VAS.Services
 {
-	public class RenderingJobsController : IRenderingJobsControler, IController
+	public class RenderingJobsController : IRenderingJobsController, IController
 	{
 		/* List of pending jobs */
 		JobCollectionVM jobs, pendingJobs;
@@ -78,27 +77,27 @@ namespace VAS.Services
 			Disposed = true;
 		}
 
-		public void AddJob (JobVM job)
+		public void AddJob (Job job)
 		{
 			if (job == null)
 				return;
-			jobs.Model.Add (job.Model);
-			pendingJobs.Model.Add (job.Model);
+			jobs.Model.Add (job);
+			pendingJobs.Model.Add (job);
 			UpdateJobsStatus ();
 			if (pendingJobs.Count () == 1)
 				StartNextJob ();
 		}
 
-		public void RetryJobs (JobCollectionVM retryJobs)
+		public void RetryJobs (RangeObservableCollection<JobVM> retryJobs)
 		{
-			foreach (Job job in retryJobs.Model) {
-				if (!jobs.Model.Contains (job))
+			foreach (JobVM job in retryJobs.ToList ()) {
+				if (!jobs.Model.Contains (job.Model))
 					return;
-				if (!pendingJobs.Model.Contains (job)) {
+				if (!pendingJobs.Model.Contains (job.Model)) {
 					job.State = JobState.NotStarted;
-					jobs.Model.Remove (job);
-					jobs.Model.Add (job);
-					pendingJobs.Model.Add (job);
+					jobs.Model.Remove (job.Model);
+					jobs.Model.Add (job.Model);
+					pendingJobs.Model.Add (job.Model);
 					UpdateJobsStatus ();
 				}
 			}
@@ -115,7 +114,7 @@ namespace VAS.Services
 			jobs.Model.RemoveAll (j => j.State == JobState.Finished);
 		}
 
-		public void CancelJobs (JobCollectionVM cancelJobs)
+		public void CancelJobs (RangeObservableCollection<JobVM> cancelJobs)
 		{
 			foreach (JobVM job in cancelJobs) {
 				job.State = JobState.Cancelled;
@@ -248,7 +247,7 @@ namespace VAS.Services
 		{
 			Time lastTS;
 			TimelineEvent play;
-			MediaFile file;
+			MediaFile file = null;
 			IEnumerable<FrameDrawing> drawings;
 			int cameraIndex;
 			Area roi;
@@ -267,7 +266,10 @@ namespace VAS.Services
 			if (cameraIndex >= element.Play.FileSet.Count) {
 				Log.Error (string.Format ("Camera index={0} not matching for current fileset count={1}",
 					cameraIndex, element.Play.FileSet.Count));
-				file = element.Play.FileSet [0];
+				//Fix crash rendering when no video
+				if (element.Play.FileSet.Count > 0) {
+					file = element.Play.FileSet [0];
+				}
 			} else {
 				file = element.Play.FileSet [cameraIndex];
 			}
@@ -289,14 +291,14 @@ namespace VAS.Services
 				if (image_path == null) {
 					continue;
 				}
-				videoEditor.AddSegment (file.FilePath, lastTS.MSeconds,
-					fd.Render.MSeconds - lastTS.MSeconds,
-					element.Rate, play.Name, file.HasAudio, roi);
+				videoEditor.AddSegment (file.FilePath, (lastTS + file.Offset).MSeconds,
+										fd.Render.MSeconds - lastTS.MSeconds,
+										element.Rate, play.Name, file.HasAudio, roi);
 				// Drawings have already been cropped to ROI by the canvas, we pass an empty area
 				videoEditor.AddImageSegment (image_path, 0, fd.Pause.MSeconds, play.Name, new Area ());
 				lastTS = fd.Render;
 			}
-			videoEditor.AddSegment (file.FilePath, lastTS.MSeconds,
+			videoEditor.AddSegment (file.FilePath, (lastTS + file.Offset).MSeconds,
 				play.Stop.MSeconds - lastTS.MSeconds,
 				element.Rate, play.Name, file.HasAudio, roi);
 			return true;
@@ -309,7 +311,7 @@ namespace VAS.Services
 
 			capturer = App.Current.MultimediaToolkit.GetFramesCapturer ();
 			capturer.Open (file.FilePath);
-			frame = capturer.GetFrame (drawing.Render, true, (int)file.DisplayVideoWidth, (int)file.DisplayVideoHeight);
+			frame = capturer.GetFrame (drawing.Render + file.Offset, true, (int)file.DisplayVideoWidth, (int)file.DisplayVideoHeight);
 			capturer.Dispose ();
 			if (frame == null) {
 				Log.Error (String.Format ("Could not get frame for file {0} at pos {1}",
@@ -426,10 +428,10 @@ namespace VAS.Services
 			}
 			App.Current.EventsBroker.Subscribe<ClearDoneJobsEvent> (HandleClearDoneJobsEvent);
 			App.Current.EventsBroker.Subscribe<RetrySelectedJobsEvent> (HandleRetrySelectedJobsEvent);
-			App.Current.EventsBroker.Subscribe<CancelSelectedJobsEvent> (HandleCancelSelectedJobsEvent);
+			App.Current.EventsBroker.Subscribe<CancelJobsEvent> (HandleCancelSelectedJobsEvent);
 			App.Current.EventsBroker.Subscribe<ConvertVideoFilesEvent> ((e) => {
 				ConversionJob job = new ConversionJob (e.Files, e.Settings);
-				AddJob (new JobVM { Model = job });
+				AddJob (job);
 			});
 			status = ControllerStatus.Started;
 		}
@@ -441,7 +443,7 @@ namespace VAS.Services
 			}
 			App.Current.EventsBroker.Unsubscribe<ClearDoneJobsEvent> (HandleClearDoneJobsEvent);
 			App.Current.EventsBroker.Unsubscribe<RetrySelectedJobsEvent> (HandleRetrySelectedJobsEvent);
-			App.Current.EventsBroker.Unsubscribe<CancelSelectedJobsEvent> (HandleCancelSelectedJobsEvent);
+			App.Current.EventsBroker.Unsubscribe<CancelJobsEvent> (HandleCancelSelectedJobsEvent);
 			status = ControllerStatus.Stopped;
 		}
 
@@ -465,7 +467,7 @@ namespace VAS.Services
 			RetryJobs (e.Jobs);
 		}
 
-		protected void HandleCancelSelectedJobsEvent (CancelSelectedJobsEvent e)
+		protected void HandleCancelSelectedJobsEvent (CancelJobsEvent e)
 		{
 			CancelJobs (e.Jobs);
 		}

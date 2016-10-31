@@ -66,6 +66,7 @@ namespace VAS.Services.ViewModel
 			if (Cancel != null) {
 				Cancel (this, null);
 			}
+			App.Current.RenderingJobsController?.CancelCurrentJob ();
 		}
 
 		/// <summary>
@@ -75,6 +76,8 @@ namespace VAS.Services.ViewModel
 		{
 			if (ManageJobs != null) {
 				ManageJobs (this, null);
+			} else {
+				App.Current.GUIToolkit.ManageJobs ();
 			}
 		}
 		#endregion

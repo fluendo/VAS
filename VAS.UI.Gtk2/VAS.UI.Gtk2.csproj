@@ -92,6 +92,9 @@
   	<Compile Include="gtk-gui\VAS.UI.Component.RenderingStateBarView.cs" />
     <Compile Include="UI\TreeView\FilterTreeViewBase.cs" />
     <Compile Include="UI\TreeView\StringObject.cs" />
+    <Compile Include="UI\TreeView\RenderingJobsTreeView.cs" />
+    <Compile Include="UI\Dialog\RenderingJobsDialog.cs" />
+    <Compile Include="gtk-gui\VAS.UI.Dialog.RenderingJobsDialog.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

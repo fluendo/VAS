@@ -16,22 +16,25 @@
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
 using System;
-using VAS.Core.Common;
-using VAS.Core.Services.ViewModel;
+using VAS.Services.ViewModel;
 
-namespace VAS.Core.Events
+namespace VAS.Services.State
 {
-	public class ClearDoneJobsEvent : Event
+	public class RenderingJobsDialogState : ScreenState<RenderingJobsDialogVM>
 	{
-	}
+		public const string NAME = "RenderingJobsDialog";
 
-	public class RetrySelectedJobsEvent : Event
-	{
-		public RangeObservableCollection<JobVM> Jobs { get; set; }
-	}
+		public override string Name {
+			get {
+				return NAME;
+			}
+		}
 
-	public class CancelJobsEvent : Event
-	{
-		public RangeObservableCollection<JobVM> Jobs { get; set; }
+		protected override void CreateViewModel (dynamic data)
+		{
+			ViewModel = new RenderingJobsDialogVM {
+				JobCollectionVM = App.Current.RenderingJobsController.Jobs
+			};
+		}
 	}
 }

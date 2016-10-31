@@ -34,7 +34,7 @@ namespace VAS.UI.Common
 	/// <summary>
 	/// Tree view base implementation for MVVM.
 	/// </summary>
-	public class TreeViewBase<TCollectionViewModel, TModel, TViewModel> : TreeView, IView<TCollectionViewModel>
+	public class TreeViewBase<TCollectionViewModel, TModel, TViewModel> : Gtk.TreeView, IView<TCollectionViewModel>
 		where TCollectionViewModel : class, INestedViewModel<TViewModel>
 		where TViewModel : class, IViewModel<TModel>, new()
 	{
@@ -122,7 +122,7 @@ namespace VAS.UI.Common
 				break;
 			}
 
-			filter.Refilter ();
+			filter?.Refilter ();
 		}
 
 		protected virtual void AddSubViewModel (IViewModel subViewModel, TreeIter parent)
@@ -218,7 +218,7 @@ namespace VAS.UI.Common
 			}
 			TreeIter iter = dictionaryStore [senderVM];
 			Model.EmitRowChanged (store.GetPath (iter), iter);
-			filter.Refilter ();
+			filter?.Refilter ();
 			this.QueueDraw ();
 		}
 
@@ -279,7 +279,7 @@ namespace VAS.UI.Common
 				}
 			}
 			ViewModel.SelectionReplace (selected);
-			filter.Refilter ();
+			filter?.Refilter ();
 		}
 
 		protected virtual void HandleViewModelPropertyChanged (object sender, PropertyChangedEventArgs e)

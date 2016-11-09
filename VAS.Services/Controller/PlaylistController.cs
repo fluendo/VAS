@@ -26,7 +26,7 @@ using VAS.Core.Hotkeys;
 using VAS.Core.Interfaces.MVVMC;
 using VAS.Core.MVVMC;
 using VAS.Core.Store.Playlists;
-using VAS.Services.ViewModel;
+using VAS.Core.ViewModel;
 
 namespace VAS.Services.Controller
 {

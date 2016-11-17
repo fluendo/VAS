@@ -180,7 +180,7 @@ namespace VAS.Services.Controller
 		{
 			TModel loadedProject = null;
 
-			if (e.PropertyName != "Selection") {
+			if (sender != ViewModel || e.PropertyName != "Selection") {
 				return;
 			}
 

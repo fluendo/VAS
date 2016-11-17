@@ -29,6 +29,7 @@ using VAS.Core.Interfaces.MVVMC;
 using VAS.Core.Interfaces.Plugins;
 using VAS.Core.MVVMC;
 using VAS.Core.Store;
+using VAS.Core.ViewModel;
 using VAS.Services.ViewModel;
 
 namespace VAS.Services.Controller
@@ -179,7 +180,7 @@ namespace VAS.Services.Controller
 		{
 			TModel loadedProject = null;
 
-			if (e.PropertyName != "Selection") {
+			if (sender != ViewModel || e.PropertyName != "Selection") {
 				return;
 			}
 

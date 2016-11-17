@@ -15,44 +15,49 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
+using System;
 using NUnit.Framework;
-using VAS.Core.Store;
+using VAS.Core.Store.Templates;
 using VAS.Core.ViewModel;
+using System.Reflection;
 
-namespace VAS.Tests.MVVMC
+namespace VAS.Tests.Core.ViewModel
 {
 	[TestFixture]
-	public class TestViewModelBase
+	public class TestTemplateVM
 	{
 		[Test]
-		public void TextForwardProperty ()
+		public void TestProperties ()
 		{
-			int eventCount = 0;
-			TimeNode timeNode = new TimeNode ();
-			TimeNodeVM viewModel = new TimeNodeVM ();
-			viewModel.Model = timeNode;
-			viewModel.PropertyChanged += (sender, e) => eventCount++;
+			var model = new Utils.DashboardDummy {
+				Name = "dash",
+				Static = true,
+			};
+			var viewModel = new DummyDashboardViewModel {
+				Model = model
+			};
+			model.IsChanged = false;
 
-
-			timeNode.EventTime = new Time (0);
-
-			Assert.AreEqual (1, eventCount);
+			Assert.AreEqual (false, viewModel.Edited);
+			Assert.AreEqual ("dash", viewModel.Name);
+			Assert.AreEqual (null, viewModel.Icon);
 		}
 
 		[Test]
-		public void TextChangeModel ()
+		public void TestEdited ()
 		{
-			int eventCount = 0;
-			TimeNode timeNode = new TimeNode ();
-			TimeNodeVM viewModel = new TimeNodeVM ();
-			viewModel.Model = null;
-			viewModel.Model = timeNode;
-			viewModel.PropertyChanged += (sender, e) => eventCount++;
+			var model = new Utils.DashboardDummy {
+				Name = "dash",
+				Static = true,
+			};
+			var viewModel = new DummyDashboardViewModel {
+				Model = model
+			};
+			model.IsChanged = false;
+			Assert.AreEqual (false, viewModel.Edited);
 
-			timeNode.EventTime = new Time (0);
-
-			Assert.AreEqual (1, eventCount);
+			model.Name = "Test";
+			Assert.AreEqual (true, viewModel.Edited);
 		}
 	}
 }
-

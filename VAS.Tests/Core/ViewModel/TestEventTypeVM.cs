@@ -15,44 +15,55 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
+using System;
 using NUnit.Framework;
+using VAS.Core.Common;
 using VAS.Core.Store;
 using VAS.Core.ViewModel;
 
-namespace VAS.Tests.MVVMC
+namespace VAS.Tests.Core.ViewModel
 {
 	[TestFixture]
-	public class TestViewModelBase
+	public class TestEventTypeVM
 	{
 		[Test]
-		public void TextForwardProperty ()
+		public void TestModelProxy ()
 		{
-			int eventCount = 0;
-			TimeNode timeNode = new TimeNode ();
-			TimeNodeVM viewModel = new TimeNodeVM ();
-			viewModel.Model = timeNode;
-			viewModel.PropertyChanged += (sender, e) => eventCount++;
+			var model = new EventType ();
+			var viewModel = new EventTypeVM ();
+			viewModel.Model = model;
 
-
-			timeNode.EventTime = new Time (0);
-
-			Assert.AreEqual (1, eventCount);
+			Assert.AreSame (viewModel.Model, model);
 		}
 
 		[Test]
-		public void TextChangeModel ()
+		public void TestPropertyForwarding ()
 		{
-			int eventCount = 0;
-			TimeNode timeNode = new TimeNode ();
-			TimeNodeVM viewModel = new TimeNodeVM ();
-			viewModel.Model = null;
-			viewModel.Model = timeNode;
-			viewModel.PropertyChanged += (sender, e) => eventCount++;
+			int count = 0;
+			var model = new EventType ();
+			var viewModel = new EventTypeVM ();
+			viewModel.Model = model;
+			viewModel.PropertyChanged += (sender, e) => {
+				count++;
+			};
 
-			timeNode.EventTime = new Time (0);
+			model.Name = "T";
+			Assert.AreEqual (1, count);
+		}
 
-			Assert.AreEqual (1, eventCount);
+		[Test]
+		public void TestProperties ()
+		{
+			var model = new EventType {
+				Name = "Test1",
+				Color = Color.Red
+			};
+			var viewModel = new EventTypeVM {
+				Model = model,
+			};
+
+			Assert.AreEqual ("Test1", viewModel.Name);
+			Assert.AreEqual (Color.Red, viewModel.Color);
 		}
 	}
 }
-

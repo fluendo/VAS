@@ -15,44 +15,62 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
+using System;
 using NUnit.Framework;
 using VAS.Core.Store;
 using VAS.Core.ViewModel;
 
-namespace VAS.Tests.MVVMC
+namespace VAS.Tests.Core.ViewModel
 {
 	[TestFixture]
-	public class TestViewModelBase
+	public class TestTimerVM
 	{
 		[Test]
-		public void TextForwardProperty ()
+		public void TestProperties ()
 		{
-			int eventCount = 0;
-			TimeNode timeNode = new TimeNode ();
-			TimeNodeVM viewModel = new TimeNodeVM ();
-			viewModel.Model = timeNode;
-			viewModel.PropertyChanged += (sender, e) => eventCount++;
+			var model = new Timer {
+				Name = "Timer"
+			};
+			var viewModel = new TimerVM {
+				Model = model
+			};
 
-
-			timeNode.EventTime = new Time (0);
-
-			Assert.AreEqual (1, eventCount);
+			Assert.AreEqual ("Timer", viewModel.Name);
 		}
 
 		[Test]
-		public void TextChangeModel ()
+		public void TestForawrdProperties ()
 		{
-			int eventCount = 0;
-			TimeNode timeNode = new TimeNode ();
-			TimeNodeVM viewModel = new TimeNodeVM ();
-			viewModel.Model = null;
-			viewModel.Model = timeNode;
-			viewModel.PropertyChanged += (sender, e) => eventCount++;
+			int count = 0;
+			var model = new Timer {
+				Name = "Timer"
+			};
+			var viewModel = new TimerVM {
+				Model = model
+			};
+			viewModel.PropertyChanged += (sender, e) => count++;
 
-			timeNode.EventTime = new Time (0);
+			model.Name = "Test";
 
-			Assert.AreEqual (1, eventCount);
+			Assert.AreEqual (1, count);
+		}
+
+		[Test]
+		public void TestCollectionSync ()
+		{
+			int count = 0;
+			var model = new Timer {
+				Name = "Timer"
+			};
+			var viewModel = new TimerVM {
+				Model = model
+			};
+
+			viewModel.PropertyChanged += (sender, e) => count++;
+			model.Nodes.Add (new TimeNode ());
+
+			Assert.AreEqual (3, count);
+			Assert.AreEqual (1, viewModel.ViewModels.Count);
 		}
 	}
 }
-

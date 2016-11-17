@@ -1,4 +1,4 @@
-﻿//
+//
 //  Copyright (C) 2016 Fluendo S.A.
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -15,21 +15,43 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
-//
 
+using VAS.Core.Common;
 using VAS.Core.MVVMC;
-using VAS.Core.Store.Playlists;
+using VAS.Core.Store;
 
-namespace VAS.Services.ViewModel
+namespace VAS.Core.ViewModel
 {
 	/// <summary>
-	/// ViewModel for a collection of PlaylistVM, each with a Playlist as a Model.
+	/// View model for <see cref="EventType"/> objects.
 	/// </summary>
-	public class PlaylistCollectionVM : CollectionViewModel<Playlist, PlaylistVM>
+	public class EventTypeVM : ViewModelBase<EventType>
 	{
-		public PlaylistCollectionVM ()
-		{
+		/// <summary>
+		/// Gets or sets the name of the EventType.
+		/// </summary>
+		/// <value>The name.</value>
+		public string Name {
+			get {
+				return Model.Name;
+			}
+			set {
+				Model.Name = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the color of the event type.
+		/// </summary>
+		/// <value>The color.</value>
+		public Color Color {
+			get {
+				return Model.Color;
+			}
+			set {
+				Model.Color = value;
+			}
 		}
 	}
-}
 
+}

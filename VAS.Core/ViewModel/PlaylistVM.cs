@@ -15,55 +15,66 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
-using VAS.Core.Common;
-using VAS.Core.MVVMC;
+//
 
-namespace VAS.Services.ViewModel
+using System;
+using VAS.Core.Common;
+using VAS.Core.Interfaces;
+using VAS.Core.MVVMC;
+using VAS.Core.Store.Playlists;
+
+namespace VAS.Core.ViewModel
 {
 	/// <summary>
-	/// A ViewModel for a <see cref="Job"/>.
+	/// ViewModel for a Playlist containing a collection of <see cref="PlaylistElementVM"/>.
 	/// </summary>
-	public class JobVM : ViewModelBase<Job>
+	public class PlaylistVM : NestedSubViewModel<Playlist, PlaylistVM, IPlaylistElement, PlaylistElementVM>
 	{
-
 		/// <summary>
-		/// Gets the name of the <see cref="Job"/>.
+		/// Gets or sets the name of the playlist.
 		/// </summary>
 		/// <value>The name.</value>
 		public string Name {
 			get {
-				return Model?.Name;
+				return Model.Name;
+			}
+			set {
+				Model.Name = value;
 			}
 		}
 
 		/// <summary>
-		/// Gets the progress of the <see cref="Job"/>.
+		/// Gets the creation date of the playlist.
 		/// </summary>
-		/// <value>The progress.</value>
-		public double Progress {
+		/// <value>The creation date.</value>
+		public DateTime CreationDate {
 			get {
-				return Model != null ? Model.Progress : 0;
-			}
-			set {
-				if (Model != null) {
-					Model.Progress = value;
-				}
+				return Model.CreationDate;
 			}
 		}
 
 		/// <summary>
-		/// Gets or sets the state of the <see cref="Job"/>.
+		/// Gets or sets the last modification time of the playlist.
 		/// </summary>
-		/// <value>The state.</value>
-		public JobState State {
+		/// <value>The last modified.</value>
+		public DateTime LastModified {
 			get {
-				return Model != null ? Model.State : JobState.None;
+				return Model.LastModified;
 			}
 			set {
-				if (Model != null) {
-					Model.State = value;
-				}
+				Model.LastModified = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets the list of <see cref="IPlaylistElement"/> children.
+		/// </summary>
+		/// <value>The child models.</value>
+		public override RangeObservableCollection<IPlaylistElement> ChildModels {
+			get {
+				return Model.Elements;
 			}
 		}
 	}
 }
+

@@ -15,50 +15,62 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
-using System.Threading.Tasks;
-using VAS.Core.Events;
+using System;
 using VAS.Core.MVVMC;
 using VAS.Core.Store;
 
-namespace VAS.Services.ViewModel
+namespace VAS.Core.ViewModel
 {
-	public class ProjectVM<T> : ViewModelBase<T> where T : Project
+	public class TimeNodeVM : ViewModelBase<TimeNode>
 	{
 
 		/// <summary>
-		/// Gets a value indicating whether the project has been edited.
+		/// Gets or sets the name.
 		/// </summary>
-		/// <value><c>true</c> if edited; otherwise, <c>false</c>.</value>
-		public bool Edited {
+		/// <value>The name.</value>
+		public string Name {
 			get {
-				return Model?.IsChanged == true;
+				return Model.Name;
+			}
+			set {
+				Model.Name = value;
 			}
 		}
 
 		/// <summary>
-		/// Command to export a project.
+		/// Gets or sets the start Time
 		/// </summary>
-		public Task<bool> Export ()
-		{
-			return App.Current.EventsBroker.PublishWithReturn (new ExportEvent<T> { Object = Model });
+		public Time Start {
+			get {
+				return Model.Start;
+			}
+			set {
+				Model.Start = value;
+			}
 		}
 
 		/// <summary>
-		/// Command to delete a project.
+		/// Gets or sets the stop time
 		/// </summary>
-		public Task<bool> Delete ()
-		{
-			return App.Current.EventsBroker.PublishWithReturn (new DeleteEvent<T> { Object = Model });
+		public Time Stop {
+			get {
+				return Model.Stop;
+			}
+			set {
+				Model.Stop = value;
+			}
 		}
 
 		/// <summary>
-		/// Command to save a project.
+		/// Get or set the event time
 		/// </summary>
-		/// <param name="force">If set to <c>true</c> does not prompt to save.</param>
-		public Task<bool> Save (bool force)
-		{
-			return App.Current.EventsBroker.PublishWithReturn (new UpdateEvent<T> { Object = Model, Force = force });
+		public Time EventTime {
+			get {
+				return Model.EventTime;
+			}
+			set {
+				Model.EventTime = value;
+			}
 		}
 	}
 }
-

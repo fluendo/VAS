@@ -15,27 +15,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
-using System;
-using VAS.Core.Interfaces.MVVMC;
-using VAS.Core.MVVMC;
-using VAS.Core.Store;
+//
 
-namespace VAS.Services.ViewModel
+using VAS.Core.MVVMC;
+using VAS.Core.Store.Playlists;
+
+namespace VAS.Core.ViewModel
 {
 	/// <summary>
-	/// Event type collection View Models, is a Nested Collection that contains
-	/// a child observable collection of type NestedViewModel
+	/// ViewModel for a collection of PlaylistVM, each with a Playlist as a Model.
 	/// </summary>
-	public class EventTypeCollectionVM<TViewModel, VMChild> : NestedViewModel<TViewModel>
-		where TViewModel : INestedViewModel<VMChild>, new()
+	public class PlaylistCollectionVM : CollectionViewModel<Playlist, PlaylistVM>
 	{
-		public EventTypeCollectionVM ()
+		public PlaylistCollectionVM ()
 		{
-		}
-
-		public PlaylistCollectionVM Playlists {
-			get;
-			set;
 		}
 	}
 }
+

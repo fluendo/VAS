@@ -16,23 +16,12 @@
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
 using System;
-using VAS.Services.ViewModel;
-
-namespace VAS.Services.State
+namespace VAS.Tests.Core.ViewModel
 {
-	public class JobsManagerState : ScreenState<JobsManagerVM>
+	public class TestEventTypesTimelineVM
 	{
-		public const string NAME = "JobsManager";
-
-		public override string Name {
-			get {
-				return NAME;
-			}
-		}
-
-		protected override void CreateViewModel (dynamic data)
+		public TestEventTypesTimelineVM ()
 		{
-			ViewModel = App.Current.JobsManager as JobsManagerVM;
 		}
 	}
 }

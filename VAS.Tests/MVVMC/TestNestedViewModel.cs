@@ -18,6 +18,7 @@
 using System.Linq;
 using NUnit.Framework;
 using VAS.Core.MVVMC;
+
 namespace VAS.Tests.MVVMC
 {
 	[TestFixture]

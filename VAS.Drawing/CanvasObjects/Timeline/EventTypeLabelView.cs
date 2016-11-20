@@ -1,4 +1,4 @@
-﻿//
+//
 //  Copyright (C) 2016 Fluendo S.A.
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -15,18 +15,45 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
-//
 
+using System;
+using VAS.Core.Common;
+using VAS.Core.Interfaces.Drawing;
+using VAS.Core.ViewModel;
 using VAS.Core.MVVMC;
-using VAS.Core.Store.Playlists;
 
-namespace VAS.Core.ViewModel
+namespace VAS.Drawing.CanvasObjects.Timeline
 {
-	/// <summary>
-	/// ViewModel for a collection of PlaylistVM, each with a Playlist as a Model.
-	/// </summary>
-	public class PlaylistCollectionVM : CollectionViewModel<Playlist, PlaylistVM>
+
+	[View ("EventTypeLabelView")]
+	public class EventTypeLabelView : LabelView, ICanvasObjectView<EventTypeVM>
 	{
+		EventTypeVM viewModel;
+
+		public override Color Color {
+			get {
+				return ViewModel.Color;
+			}
+		}
+
+		public override string Name {
+			get {
+				return ViewModel.Name;
+			}
+		}
+
+		public EventTypeVM ViewModel {
+			get {
+				return viewModel;
+			}
+			set {
+				viewModel = value;
+			}
+		}
+
+		public void SetViewModel (object viewModel)
+		{
+			ViewModel = (EventTypeVM)viewModel;
+		}
 	}
 }
-

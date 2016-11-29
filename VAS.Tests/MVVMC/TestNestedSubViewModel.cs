@@ -81,16 +81,16 @@ namespace VAS.Tests.MVVMC
 		[Test]
 		public void TestReplaceModel ()
 		{
-			child1 = new DummyModelChild ();
-			child2 = new DummyModelChild ();
+			var child4 = new DummyModelChild ();
+			var child5 = new DummyModelChild ();
 			model = new DummyModelWithChildren ();
-			model.Children.Add (child1);
-			model.Children.Add (child2);
+			model.Children.Add (child4);
+			model.Children.Add (child5);
 			viewModel.Model = model;
 
 			Assert.AreEqual (2, viewModel.Count ());
-			Assert.AreSame (child1, viewModel.ViewModels [0].Model);
-			Assert.AreSame (child2, viewModel.ViewModels [1].Model);
+			Assert.AreSame (child4, viewModel.ViewModels [0].Model);
+			Assert.AreSame (child5, viewModel.ViewModels [1].Model);
 		}
 
 		[Test]

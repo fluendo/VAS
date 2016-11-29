@@ -149,7 +149,7 @@ namespace VAS.UI.Component
 
 		VideoPlayerVM Player {
 			get {
-				return ViewModel?.PlayerVM;
+				return ViewModel?.VideoPlayer;
 			}
 		}
 

@@ -73,11 +73,11 @@ namespace VAS.Drawing.Widgets
 
 			set {
 				if (viewModel != null) {
-					viewModel.PlayerVM.PropertyChanged -= HandlePropertyChangedEventHandler;
+					viewModel.VideoPlayer.PropertyChanged -= HandlePropertyChangedEventHandler;
 				}
 				viewModel = value;
 				if (viewModel != null) {
-					viewModel.PlayerVM.PropertyChanged += HandlePropertyChangedEventHandler;
+					viewModel.VideoPlayer.PropertyChanged += HandlePropertyChangedEventHandler;
 				}
 				Duration = viewModel.Project.FileSet.Duration;
 			}
@@ -210,7 +210,7 @@ namespace VAS.Drawing.Widgets
 
 		bool PlayingState {
 			get {
-				return ViewModel.PlayerVM.Playing;
+				return ViewModel.VideoPlayer.Playing;
 			}
 		}
 
@@ -370,7 +370,7 @@ namespace VAS.Drawing.Widgets
 		void HandlePropertyChangedEventHandler (object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == "Duration") {
-				Duration = ViewModel.PlayerVM.Duration;
+				Duration = ViewModel.VideoPlayer.Duration;
 			}
 
 		}

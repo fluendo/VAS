@@ -102,7 +102,7 @@ namespace VAS.Drawing.Widgets
 		/// <value>The player.</value>
 		public IVideoPlayerController Player {
 			get {
-				return ViewModel?.PlayerVM.Player;
+				return ViewModel?.VideoPlayer.Player;
 			}
 		}
 

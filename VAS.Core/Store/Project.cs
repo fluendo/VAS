@@ -73,10 +73,8 @@ namespace VAS.Core.Store
 			base.Dispose (disposing);
 			if (disposing) {
 				Dashboard?.Dispose ();
-				if (Timeline != null) {
-					foreach (TimelineEvent evt in Timeline) {
-						evt.Dispose ();
-					}
+				foreach (TimelineEvent evt in Timeline) {
+					evt.Dispose ();
 				}
 			}
 		}

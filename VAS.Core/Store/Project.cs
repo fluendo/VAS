@@ -101,9 +101,10 @@ namespace VAS.Core.Store
 			set;
 		}
 
+		[JsonProperty]
 		public RangeObservableCollection<TimelineEvent> Timeline {
 			get;
-			set;
+			protected set;
 		}
 
 		[JsonProperty (Order = -7)]
@@ -121,19 +122,22 @@ namespace VAS.Core.Store
 			set;
 		}
 
+		[JsonProperty]
 		public RangeObservableCollection<Period> Periods {
 			get;
-			set;
+			protected set;
 		}
 
+		[JsonProperty]
 		public RangeObservableCollection<Timer> Timers {
 			get;
-			set;
+			protected set;
 		}
 
+		[JsonProperty]
 		public RangeObservableCollection<Playlist> Playlists {
 			get;
-			set;
+			protected set;
 		}
 
 		/// <summary>

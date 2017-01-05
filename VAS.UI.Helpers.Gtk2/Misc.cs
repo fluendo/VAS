@@ -240,19 +240,18 @@ namespace VAS.UI.Helpers
 		}
 
 		/// <summary>
-		/// Loads the a image for a given name and size.
+		/// Loads the a image for a given name and size (icons must be squared)
 		/// </summary>
 		/// <returns>The icon as a Gdk.Image or missing image icon if not found.</returns>
 		/// <param name="name">Icon Name.</param>
-		/// <param name="width">Icon Width as a Gtk.IconSize.</param>
-		/// <param name="width">Icon Height as a Gtk.IconSize.</param>
+		/// <param name="size">Icon size as a int.</param>
 		/// <param name="flags">Lookup Flags like ForceSVG.</param>
-		public static Gtk.Image LoadImageIcon (string name, int width, int height, IconLookupFlags flags = IconLookupFlags.ForceSvg)
+		public static Gtk.Image LoadImageIcon (string name, int size, IconLookupFlags flags = IconLookupFlags.ForceSvg)
 		{
 			Gtk.Image image = new Gtk.Image ();
-			image.Pixbuf = Misc.LoadIcon (name, width);
-			image.WidthRequest = width;
-			image.HeightRequest = height;
+			image.Pixbuf = Misc.LoadIcon (name, size);
+			image.WidthRequest = size;
+			image.HeightRequest = size;
 
 			return image;
 		}

@@ -73,10 +73,8 @@ namespace VAS.Core.Store
 			base.Dispose (disposing);
 			if (disposing) {
 				Dashboard?.Dispose ();
-				if (Timeline != null) {
-					foreach (TimelineEvent evt in Timeline) {
-						evt.Dispose ();
-					}
+				foreach (TimelineEvent evt in Timeline) {
+					evt.Dispose ();
 				}
 			}
 		}
@@ -103,9 +101,10 @@ namespace VAS.Core.Store
 			set;
 		}
 
+		[JsonProperty]
 		public RangeObservableCollection<TimelineEvent> Timeline {
 			get;
-			set;
+			protected set;
 		}
 
 		[JsonProperty (Order = -7)]
@@ -123,19 +122,22 @@ namespace VAS.Core.Store
 			set;
 		}
 
+		[JsonProperty]
 		public RangeObservableCollection<Period> Periods {
 			get;
-			set;
+			protected set;
 		}
 
+		[JsonProperty]
 		public RangeObservableCollection<Timer> Timers {
 			get;
-			set;
+			protected set;
 		}
 
+		[JsonProperty]
 		public RangeObservableCollection<Playlist> Playlists {
 			get;
-			set;
+			protected set;
 		}
 
 		/// <summary>

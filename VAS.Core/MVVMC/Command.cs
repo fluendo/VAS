@@ -41,7 +41,10 @@ namespace VAS.Core.MVVMC
 		{
 			Contract.Requires (execute != null);
 
-			this.execute = (o) => Task.Run (() => execute (o));
+			this.execute = (o) => {
+				execute (o);
+				return AsyncHelpers.Return ();
+			};
 		}
 
 		public Command (Func<Task> execute) : this (o => execute ())

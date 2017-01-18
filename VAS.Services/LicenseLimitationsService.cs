@@ -1,5 +1,5 @@
 ﻿//
-//  Copyright (C) 2015 Fluendo S.A.
+//  Copyright (C) 2017 Fluendo S.A.
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -15,30 +15,53 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
-using System;
-using System.Collections.Generic;
-using VAS.Core.Common;
-using VAS.Core.Filters;
 using VAS.Core.Interfaces;
+using VAS.Core.License;
 
-namespace VAS.DB.Views
+namespace VAS.Services
 {
-
-	public interface IQueryView
+	public abstract class LicenseLimitationsService<T> : IService
+		where T : LicenseLimitation
 	{
-		Type Type { get; }
+		public ILicenseLimitations<T> LicenseLimitations { get; protected set; }
 
-		string DocumentType { get; }
+		bool started;
+
+		protected LicenseLimitationsService ()
+		{
+			started = false;
+		}
+
+		#region IService
+
+		public int Level {
+			get {
+				return 100;
+			}
+		}
+
+		public string Name {
+			get {
+				return "LicenseLimitationsService";
+			}
+		}
+
+		public bool Start ()
+		{
+			if (!started) {
+				started = true;
+			}
+			return true;
+		}
+
+		public bool Stop ()
+		{
+			if (started) {
+				started = false;
+			}
+			return true;
+		}
+
+		#endregion
 	}
-
-	public interface IQueryView<T>: IQueryView
-	{
-		IEnumerable<T> Query (QueryFilter filter);
-
-		IEnumerable<T> QueryFull (QueryFilter filter, IStorableObjectsCache cache);
-
-		int Count (QueryFilter filter);
-	}
-
 }
-

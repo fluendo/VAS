@@ -23,6 +23,6 @@ namespace VAS.Services
 	public abstract class LicenseLimitationsService<T> : ILicenseLimitationsService<T>
 		where T : LicenseLimitation
 	{
-		public ILicenseLimitations<T> LicenseLimitations { get; protected set; }
+		public ILicenseLimitations<T> LicenseLimitations { get; set; }
 	}
 }

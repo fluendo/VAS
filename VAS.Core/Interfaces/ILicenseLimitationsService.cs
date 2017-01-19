@@ -22,5 +22,6 @@ namespace VAS.Core.Interfaces
 {
 	public interface ILicenseLimitationsService<T> where T : LicenseLimitation
 	{
+		ILicenseLimitations<T> LicenseLimitations { get; set; }
 	}
 }

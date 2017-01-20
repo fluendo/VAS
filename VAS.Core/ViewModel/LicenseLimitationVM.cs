@@ -16,6 +16,7 @@
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
 using System;
+using System.ComponentModel;
 using VAS.Core.License;
 using VAS.Core.MVVMC;
 
@@ -27,6 +28,27 @@ namespace VAS.Core.ViewModel
 	public class LicenseLimitationVM<T> : ViewModelBase<T>
 		where T : LicenseLimitation
 	{
+		Command upgradeCommand;
+
+		/// <summary>
+		/// Gets or sets the model.
+		/// </summary>
+		/// <value>The model.</value>
+		public override T Model {
+			get {
+				return base.Model;
+			}
+			set {
+				if (base.Model != null) {
+					base.Model.PropertyChanged -= HandleModelChanged;
+				}
+				base.Model = value;
+				if (base.Model != null) {
+					base.Model.PropertyChanged += HandleModelChanged;
+				}
+			}
+		}
+
 		/// <summary>
 		/// Proxy property for LimitationNmae.
 		/// </summary>
@@ -54,6 +76,28 @@ namespace VAS.Core.ViewModel
 		public bool Enabled {
 			get {
 				return Model?.Enabled ?? false;
+			}
+		}
+
+		/// <summary>
+		/// Command to upgrade away from this limitation.
+		/// </summary>
+		/// <value>The upgrade command.</value>
+		public Command UpgradeCommand {
+			get {
+				return upgradeCommand;
+			}
+
+			set {
+				upgradeCommand = value;
+				upgradeCommand.Executable = Enabled;
+			}
+		}
+
+		void HandleModelChanged (object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == nameof (Model.Enabled)) {
+				UpgradeCommand.Executable = Enabled;
 			}
 		}
 	}

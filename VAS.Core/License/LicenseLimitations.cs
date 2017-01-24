@@ -54,7 +54,7 @@ namespace VAS.Core.License
 
 		public void SetLimitationsStatus (bool status)
 		{
-			Limitations.ForEach (l => l.Enabled = true);
+			Limitations.ForEach (l => l.Enabled = status);
 		}
 
 		public void SetLimitationsStatus (string limitationName, bool status)

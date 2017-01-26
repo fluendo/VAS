@@ -38,11 +38,11 @@ namespace VAS.Core.License
 		IEnumerable<T> GetLimitations ();
 
 		/// <summary>
-		/// Gets the limitations.
+		/// Gets the limitation.
 		/// </summary>
 		/// <returns>The limitations.</returns>
 		/// <param name="limitationName">Limitation name.</param>
-		IEnumerable<T> GetLimitations (string limitationName);
+		T GetLimitation (string limitationName);
 
 		/// <summary>
 		/// Sets the limitations status.
@@ -51,10 +51,10 @@ namespace VAS.Core.License
 		void SetLimitationsStatus (bool status);
 
 		/// <summary>
-		/// Sets the limitations status.
+		/// Sets the limitation status.
 		/// </summary>
 		/// <param name="limitationName">Limitation name.</param>
 		/// <param name="status">If set to <c>true</c> status.</param>
-		void SetLimitationsStatus (string limitationName, bool status);
+		void SetLimitationStatus (string limitationName, bool status);
 	}
 }

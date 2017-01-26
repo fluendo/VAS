@@ -27,39 +27,44 @@ namespace VAS.Core.License
 	public class LicenseLimitations<T> : ILicenseLimitations<T>
 		where T : LicenseLimitation
 	{
-		protected List<T> Limitations { get; set; }
+		protected Dictionary<string, T> Limitations { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:VAS.Core.License.LicenseLimitations`1"/> class.
 		/// </summary>
 		public LicenseLimitations ()
 		{
-			Limitations = new List<T> ();
+			Limitations = new Dictionary<string, T> ();
 		}
 
 		public void AddLimitation (T limitation)
 		{
-			Limitations.Add (limitation);
+			Limitations [limitation.LimitationName] = limitation;
 		}
 
 		public IEnumerable<T> GetLimitations ()
 		{
-			return Limitations.AsEnumerable ();
+			return Limitations.Values;
 		}
 
-		public IEnumerable<T> GetLimitations (string limitationName)
+		public T GetLimitation (string limitationName)
 		{
-			return Limitations.Where ((l) => l.LimitationName == limitationName);
+			T value;
+			Limitations.TryGetValue (limitationName, out value);
+			return value;
 		}
 
 		public void SetLimitationsStatus (bool status)
 		{
-			Limitations.ForEach (l => l.Enabled = status);
+			foreach (var limitation in GetLimitations ()) {
+				limitation.Enabled = status;
+			}
 		}
 
-		public void SetLimitationsStatus (string limitationName, bool status)
+		public void SetLimitationStatus (string limitationName, bool status)
 		{
-			foreach (var limit in GetLimitations (limitationName)) {
+			var limit = GetLimitation (limitationName);
+			if (limit != null) {
 				limit.Enabled = status;
 			}
 		}

@@ -48,22 +48,17 @@ namespace VAS.Tests.Core.License
 			limitations.AddLimitation (limitationPlayers2);
 			limitations.AddLimitation (limitationTeams);
 
-			List<LicenseLimitation> limitationsPlayers =
-				new List<LicenseLimitation> (limitations.GetLimitations ("RAPlayers"));
-			List<LicenseLimitation> limitationsTeams =
-				new List<LicenseLimitation> (limitations.GetLimitations ("Teams"));
+			LicenseLimitation testLimitationPlayers = limitations.GetLimitation ("RAPlayers");
+			LicenseLimitation testLimitationTeams = limitations.GetLimitation ("Teams");
 			List<LicenseLimitation> allLlimitations =
 				new List<LicenseLimitation> (limitations.GetLimitations ());
 
-			Assert.AreEqual (2, limitationsPlayers.Count);
-			Assert.IsTrue (limitationsPlayers [0].Enabled);
-			Assert.AreEqual (10, limitationsPlayers [0].Maximum);
-			Assert.IsTrue (limitationsPlayers [1].Enabled);
-			Assert.AreEqual (20, limitationsPlayers [1].Maximum);
-			Assert.AreEqual (1, limitationsTeams.Count);
-			Assert.IsTrue (limitationsTeams [0].Enabled);
-			Assert.AreEqual (5, limitationsTeams [0].Maximum);
-			Assert.AreEqual (3, allLlimitations.Count);
+			Assert.AreEqual (2, allLlimitations.Count);
+			Assert.IsTrue (testLimitationPlayers.Enabled);
+			Assert.AreEqual (20, testLimitationPlayers.Maximum);
+			Assert.IsTrue (testLimitationTeams.Enabled);
+			Assert.AreEqual (5, testLimitationTeams.Maximum);
+			Assert.AreEqual (2, allLlimitations.Count);
 		}
 	}
 }

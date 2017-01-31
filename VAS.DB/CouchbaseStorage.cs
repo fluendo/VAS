@@ -24,6 +24,7 @@ using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 using VAS.Core;
 using VAS.Core.Common;
+using VAS.Core.Events;
 using VAS.Core.Filters;
 using VAS.Core.Interfaces;
 using VAS.Core.Serialization;
@@ -197,6 +198,7 @@ namespace VAS.DB
 
 		public void Store<T> (IEnumerable<T> storableEnumerable, bool forceUpdate = false) where T : IStorable
 		{
+			List<T> newDBObjects = new List<T> ();
 			lock (mutex) {
 				bool success = db.RunInTransaction (() => {
 					foreach (var t in storableEnumerable) {
@@ -224,6 +226,9 @@ namespace VAS.DB
 							foreach (IStorable storable in node.OrphanChildren) {
 								db.GetDocument (DocumentsSerializer.StringFromID (storable.ID, t.ID)).Delete ();
 							}
+							if (forceUpdate) {
+								newDBObjects.Add (t);
+							}
 						} catch (Exception ex) {
 							Log.Exception (ex);
 							return false;
@@ -234,6 +239,9 @@ namespace VAS.DB
 				if (!success) {
 					throw new StorageException (Catalog.GetString ("Error storing object from the storage"));
 				}
+			}
+			foreach (var newObject in newDBObjects) {
+				App.Current.EventsBroker.Publish (new StorageAddEvent { Object = newObject, Sender = this });
 			}
 		}
 
@@ -275,6 +283,7 @@ namespace VAS.DB
 				if (success) {
 					Info.LastModified = DateTime.UtcNow;
 					DocumentsSerializer.SaveObject (Info, db, null, false);
+					App.Current.EventsBroker.Publish (new StorageDeleteEvent { Object = storable, Sender = this });
 				} else {
 					throw new StorageException (Catalog.GetString ("Error deleting object from the storage"));
 				}

@@ -213,6 +213,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\LicenseLimitationVM.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ILicenseLimitationsService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVMC\LimitedCollectionViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Events\StorageEvents.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Common\" />

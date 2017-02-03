@@ -206,6 +206,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\PlayerVM.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\TeamVM.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVMC\StorableVM.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IAppUpdater.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Common\" />

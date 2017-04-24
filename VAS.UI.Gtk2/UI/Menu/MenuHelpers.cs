@@ -83,7 +83,10 @@ namespace VAS.UI.Menus
 				};
 			}
 			item = new MenuItem (Catalog.GetString ("Create new playlist..."));
+
+			//FIXME: Crash in LongoMatch until the limitations story is done
 			LicenseLimitationVM limitation = App.Current.LicenseLimitationsService.Get ("Presentations");
+
 			if (limitation != null) {
 				item.Sensitive = limitation.Count < limitation.Maximum;
 			}

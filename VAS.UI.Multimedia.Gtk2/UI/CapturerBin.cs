@@ -167,8 +167,8 @@ namespace VAS.UI
 		public virtual Time CurrentCaptureTime {
 			get {
 				int timeDiff;
-				
-				timeDiff = (int)(DateTime.UtcNow - currentPeriodStart).TotalMilliseconds; 
+
+				timeDiff = (int)(DateTime.UtcNow - currentPeriodStart).TotalMilliseconds;
 				return new Time (accumTime.MSeconds + timeDiff);
 			}
 		}
@@ -180,7 +180,7 @@ namespace VAS.UI
 				} else {
 					return new Time (0);
 				}
-				
+
 			}
 		}
 
@@ -200,7 +200,7 @@ namespace VAS.UI
 			if (!ReadyToCapture) {
 				return;
 			}
-			
+
 			if (currentPeriod != null) {
 				string msg = Catalog.GetString ("Period recording already started");
 				App.Current.Dialogs.WarningMessage (msg, this);
@@ -208,14 +208,14 @@ namespace VAS.UI
 			}
 			recbutton.Visible = false;
 			pausebutton.Visible = savebutton.Visible = stopbutton.Visible = true;
-			
+
 			if (PeriodsNames != null && PeriodsNames.Count > Periods.Count) {
 				periodName = PeriodsNames [Periods.Count];
 			} else {
 				periodName = (Periods.Count + 1).ToString ();
 			}
 			currentPeriod = new Period { Name = periodName };
-			
+
 			currentTimeNode = currentPeriod.Start (accumTime, periodName);
 			currentTimeNode.Stop = currentTimeNode.Start;
 			currentPeriodStart = DateTime.UtcNow;
@@ -240,7 +240,7 @@ namespace VAS.UI
 				App.Current.Dialogs.WarningMessage (msg, this);
 				return;
 			}
-			
+
 			GLib.Source.Remove (timeoutID);
 			currentPeriod.Stop (CurrentCaptureTime);
 			accumTime = CurrentCaptureTime;
@@ -437,13 +437,13 @@ namespace VAS.UI
 				videowindow.Visible = false;
 				return;
 			}
-			
+
 			/* We need to use Matroska for live replay and remux when the capture is done */
 			muxer = settings.EncodingSettings.EncodingProfile.Muxer;
 			if (muxer == VideoMuxerType.Avi || muxer == VideoMuxerType.Mp4) {
 				settings.EncodingSettings.EncodingProfile.Muxer = VideoMuxerType.Matroska;
 			}
-			Capturer.Configure (settings, videowindow.WindowHandle); 
+			Capturer.Configure (settings, videowindow.WindowHandle);
 			settings.EncodingSettings.EncodingProfile.Muxer = muxer;
 			delayStart = false;
 			Capturer.Run ();
@@ -522,7 +522,7 @@ namespace VAS.UI
 		protected virtual void HandleDeleteLast (object sender, EventArgs e)
 		{
 			if (lastevent != null) {
-				App.Current.EventsBroker.Publish <EventsDeletedEvent> (
+				App.Current.EventsBroker.Publish<EventsDeletedEvent> (
 					new EventsDeletedEvent {
 						TimelineEvents = new List<TimelineEvent> { lastevent }
 					}
@@ -530,7 +530,7 @@ namespace VAS.UI
 				lastevent = null;
 				lasteventbox.Visible = false;
 			}
-			
+
 		}
 
 		protected virtual void HandleMediaInfo (int width, int height, int parN, int parD)

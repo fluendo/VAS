@@ -173,6 +173,23 @@ namespace VAS.Core.Common
 		}
 
 		/// <summary>
+		/// Gets the embedded resource text file.
+		/// </summary>
+		/// <returns>The embedded resource text file.</returns>
+		/// <param name="resourceId">Resource identifier.</param>
+		public static string GetEmbeddedResourceTextFile (string resourceId)
+		{
+			string result = "";
+			var assembly = Assembly.GetCallingAssembly ();
+			using (Stream stream = assembly.GetManifestResourceStream (resourceId)) {
+				using (StreamReader reader = new StreamReader (stream)) {
+					result = reader.ReadToEnd ();
+				}
+			}
+			return result;
+		}
+
+		/// <summary>
 		/// Starts a process with output redirection.
 		/// </summary>
 		/// <returns>The started process.</returns>

@@ -405,7 +405,8 @@ namespace VAS.Core
 				return false;
 			}
 			await App.Current.EventsBroker.Publish (new NavigationEvent { Name = state.Name });
-			return await App.Current.Navigation.Push (state.ScreenState.Panel);
+			var result = await App.Current.Navigation.Push (state.ScreenState.Panel);
+			return result;
 		}
 
 		async Task<bool> PushModalState (NavigationState state, IScreenState current)

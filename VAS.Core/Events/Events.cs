@@ -493,6 +493,7 @@ namespace VAS.Core.Events
 
 	public class LicenseChangeEvent : Event
 	{
+		public uint ProductCode { get; set; }
 	}
 
 	public class ReplaceMediaFileEvent : ReturningValueEvent<MediaFileVM>

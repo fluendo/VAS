@@ -47,7 +47,7 @@ namespace VAS.UI
 {
 	[Category ("VAS")]
 	[ToolboxItem (true)]
-	[View ("VideoPlayerView")]
+	[View (nameof (VideoPlayerView))]
 	public partial class VideoPlayerView : Bin, IView<VideoPlayerVM>, IVideoPlayerView
 	{
 		public event ClickedHandler CenterPlayheadClicked;

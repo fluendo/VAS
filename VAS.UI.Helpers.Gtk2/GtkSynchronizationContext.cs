@@ -1,5 +1,5 @@
 ﻿//
-//  Copyright (C) 2016 Fluendo S.A.
+//  Copyright (C) 2015 Fluendo S.A.
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -15,16 +15,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
-using System;
-using VAS.Core.MVVMC;
+using System.Threading;
+using Gtk;
 
-namespace VAS.Drawing
+namespace VAS.UI.Helpers
 {
-	public static class DrawingInit
+	/// <summary>
+	/// Gtk synchronization context that continues tasks in the main UI thread instead
+	/// of a random thread from the pool.
+	/// http://blogs.msdn.com/b/pfxteam/archive/2012/01/20/10259049.aspx
+	/// </summary>
+	public sealed class GtkSynchronizationContext : SynchronizationContext
 	{
-		public static void Init ()
+		public override void Post (SendOrPostCallback d, object state)
 		{
-			Scanner.ScanAll ();
+			Application.Invoke ((s, e) => d (state));
+		}
+
+		public override void Send (SendOrPostCallback d, object state)
+		{
+			Application.Invoke ((s, e) => d (state));
 		}
 	}
 }

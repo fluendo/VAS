@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using Gtk;
 using VAS.Core;
@@ -34,7 +33,7 @@ using VAS.Drawing;
 using VAS.Drawing.CanvasObjects.Blackboard;
 using VAS.UI.Dialog;
 using VAS.UI.Helpers;
-using Image = VAS.Core.Common.Image;
+using VAS.UI.Multimedia;
 
 namespace VAS.UI
 {
@@ -51,7 +50,9 @@ namespace VAS.UI
 		protected GUIToolkitBase ()
 		{
 			registry = new Registry ("GUI backend");
-			Scanner.ScanViews (App.Current.ViewLocator);
+			Scanner.ScanAll ();
+			DrawingInit.Init ();
+			VASUIMultimediaInit.Init ();
 			RegistryCanvasFromDrawables ();
 		}
 
@@ -59,13 +60,16 @@ namespace VAS.UI
 			get {
 				return mainWindow;
 			}
-			set {
+			private set {
 				mainWindow = value;
 			}
 		}
 
-		//FIXME: for compatibility with LongoMatch
-		public virtual IMainController MainController { get; }
+		public virtual IMainController MainController {
+			get {
+				return (IMainController)MainWindow;
+			}
+		}
 
 		public bool FullScreen {
 			set {
@@ -94,14 +98,13 @@ namespace VAS.UI
 			}
 		}
 
-		public virtual void Register<I, C> (int priority)
+		public void Init (Window mainWindow = null)
 		{
-			registry.Register<I, C> (priority);
-		}
-
-		public virtual IVideoPlayerView GetPlayerView ()
-		{
-			return registry.Retrieve<IVideoPlayerView> ();
+			if (mainWindow == null) {
+				mainWindow = new MainWindow ();
+			}
+			mainWindow.Hide ();
+			MainWindow = mainWindow;
 		}
 
 		public virtual List<EditionJob> ConfigureRenderingJob (Playlist playlist)
@@ -166,13 +169,6 @@ namespace VAS.UI
 
 		public abstract Project ChooseProject (List<Project> projects);
 
-		/// <summary>
-		/// Pushes the specified panel to show it. This task does not finish until the panel is shown.
-		/// </summary>
-		/// <returns>The view.</returns>
-		/// <param name="panel">Panel.</param>
-		public abstract bool LoadPanel (IPanel panel);
-
 		public abstract void ShowProjectStats (Project project);
 
 		public abstract string RemuxFile (string inputFile, string outputFile, VideoMuxerType muxer);
@@ -189,6 +185,16 @@ namespace VAS.UI
 			Log.Information ("Quit application");
 			Application.Quit ();
 			return true;
+		}
+
+		/// <summary>
+		/// Pushes the specified panel to show it. This task does not finish until the panel is shown.
+		/// </summary>
+		/// <returns>The view.</returns>
+		/// <param name="panel">Panel.</param>
+		public virtual bool LoadPanel (IPanel panel)
+		{
+			return MainController.SetPanel (panel);
 		}
 
 		public HotKey SelectHotkey (HotKey hotkey, object parent = null)
@@ -213,7 +219,7 @@ namespace VAS.UI
 		/// <param name="handler">Handler.</param>
 		public void Invoke (EventHandler handler)
 		{
-			if (App.IsMainThread) {
+			if (App.Current.IsMainThread) {
 				Log.Verbose ("Invoke called from the main thread");
 			}
 			Application.Invoke (handler);
@@ -225,7 +231,7 @@ namespace VAS.UI
 		/// <param name="handler">Handler.</param>
 		public async Task<T> Invoke<T> (Func<Task<T>> handler)
 		{
-			if (App.IsMainThread) {
+			if (App.Current.IsMainThread) {
 				Log.Verbose ("Invoke called from the main thread");
 				return await handler ();
 			}

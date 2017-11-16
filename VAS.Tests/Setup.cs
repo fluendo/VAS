@@ -43,8 +43,7 @@ namespace VAS.Tests
 			VFS.SetCurrent (new FileSystem ());
 
 			App.Current = new AppDummy ();
-			App.InitDependencies ();
-			App.Current.Config = new ConfigDummy ();
+			App.Current.InitDependencies ();
 			SynchronizationContext.SetSynchronizationContext (new MockSynchronizationContext ());
 			App.Current.DependencyRegistry.Register<IStorageManager, CouchbaseManager> (1);
 			App.Current.DependencyRegistry.Register<IStopwatch, Stopwatch> (1);
@@ -72,7 +71,16 @@ namespace VAS.Tests
 
 	public class AppDummy : App
 	{
+		public AppDummy ()
+		{
+			Config = CreateConfig ();
+		}
+
 		//Dummy class for VAS.App
+		protected override Config CreateConfig ()
+		{
+			return new ConfigDummy ();
+		}
 	}
 
 	public class ConfigDummy : Config

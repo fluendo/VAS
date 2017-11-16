@@ -71,6 +71,11 @@ namespace VAS.Tests
 
 	public class AppDummy : App
 	{
+		public AppDummy ()
+		{
+			Config = CreateConfig ();
+		}
+
 		//Dummy class for VAS.App
 		protected override Config CreateConfig ()
 		{

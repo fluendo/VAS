@@ -106,20 +106,24 @@ namespace VAS.Drawing.Cairo
 
 		public void ReDraw (Area area = null)
 		{
+			Rectangle invalidationRect;
+
 			if (widget.GdkWindow == null) {
 				return;
 			}
 			if (area == null) {
+				if ((widget.WidgetFlags & WidgetFlags.NoWindow) != 0) {
+					invalidationRect = widget.Allocation;
+				} else {
+					invalidationRect = widget.GdkWindow.ClipRegion.Clipbox;
+				}
 				Gdk.Region region = widget.GdkWindow.ClipRegion;
-				widget.GdkWindow.InvalidateRegion (region, true);
 			} else {
-				widget.GdkWindow.InvalidateRect (
-					new Gdk.Rectangle ((int)area.Start.X - 1, (int)area.Start.Y - 1,
-						(int)Math.Ceiling (area.Width) + 2,
-						(int)Math.Ceiling (area.Height) + 2),
-					true);
+				invalidationRect = new Gdk.Rectangle ((int)area.Start.X - 1, (int)area.Start.Y - 1,
+													  (int)Math.Ceiling (area.Width) + 2,
+													  (int)Math.Ceiling (area.Height) + 2);
 			}
-			widget.GdkWindow.ProcessUpdates (true);
+			widget.GdkWindow.InvalidateRect (invalidationRect, true);
 		}
 
 		public void ReDraw (IMovableObject drawable)
@@ -433,7 +437,7 @@ namespace VAS.Drawing.Cairo
 			r = args.Event.Area;
 			a = new Area (new Point (r.X, r.Y), r.Width, r.Height);
 
-			#if DEBUG
+#if DEBUG
 			DateTime now;
 			if (last == null)
 				now = last = DateTime.Now;
@@ -446,7 +450,7 @@ namespace VAS.Drawing.Cairo
 				redraws = 0;
 				last = now;
 			}
-			#endif
+#endif
 
 			Draw (a);
 		}

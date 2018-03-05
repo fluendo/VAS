@@ -17,8 +17,6 @@
 //
 using System.Collections.Generic;
 using System.Linq;
-using VAS.Core.Common;
-using VAS.Core.MVVMC;
 using VAS.Core.Store;
 
 namespace VAS.Core.ViewModel
@@ -50,14 +48,6 @@ namespace VAS.Core.ViewModel
 			set {
 				base.Model = value;
 			}
-		}
-
-		/// <summary>
-		/// Gets the subcategories of the event
-		/// </summary>
-		/// <value>The tags.</value>
-		public CollectionViewModel<Tag, TagVM> Tags {
-			get => EventType.Tags;
 		}
 
 		/// <summary>
@@ -93,12 +83,6 @@ namespace VAS.Core.ViewModel
 			}
 			set {
 				TypedModel.TagsPerRow = value;
-			}
-		}
-
-		public RangeObservableCollection<TagVM> SelectedTags {
-			get {
-				return Tags.Selection;
 			}
 		}
 

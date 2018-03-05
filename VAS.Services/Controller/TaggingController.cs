@@ -15,6 +15,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -110,15 +111,25 @@ namespace VAS.Services.Controller
 			var keyActions = new List<KeyAction> ();
 			//Add AnalysisEventButtons
 			foreach (var button in project.Dashboard.ViewModels) {
-				var analysisButton = button as AnalysisEventButtonVM;
-				if (analysisButton != null) {
-					KeyAction action = new KeyAction (new KeyConfig {
-						Name = analysisButton.Name,
-						Key = analysisButton.HotKey.Model
-					}, () => HandleSubCategoriesTagging (analysisButton));
-					keyActions.Add (action);
-					categoriesActions.Add (analysisButton.HotKey, action);
+				Action action = new Action (() => { });
+
+				if (button is TimerButtonVM timerButton) {
+					action = new Action (() => timerButton.Click (false));
+				} else if (button is TagButtonVM tagButton) {
+					action = new Action (() => {
+						tagButton.Active = !tagButton.Active;
+						tagButton.Toggle.Execute ();
+					});
+				} else if (button is EventButtonVM eventButton) {
+					action = new Action (() => HandleSubCategoriesTagging (eventButton));
 				}
+
+				KeyAction keyAction = new KeyAction (new KeyConfig {
+					Name = button.Name,
+					Key = button.HotKey.Model
+				}, action);
+				keyActions.Add (keyAction);
+				categoriesActions.Add (button.HotKey, keyAction);
 			}
 
 			return keyActions;
@@ -237,7 +248,7 @@ namespace VAS.Services.Controller
 			}
 		}
 
-		void HandleSubCategoriesTagging (AnalysisEventButtonVM buttonVM, TagVM subcategoryTagged = null)
+		void HandleSubCategoriesTagging (EventButtonVM buttonVM, TagVM subcategoryTagged = null)
 		{
 			if (subcategoryTagged != null) {
 				buttonVM.SelectedTags.Add (subcategoryTagged);
@@ -252,9 +263,8 @@ namespace VAS.Services.Controller
 				tempContext.AddAction (action);
 			}
 
-			var analysisEventButton = (buttonVM.Model as AnalysisEventButton);
-			if (analysisEventButton != null && analysisEventButton.TagMode == TagMode.Free) {
-				tempContext.ExpiredTimeAction = buttonVM.ToggleIsCategoryClicked;
+			if (buttonVM is AnalysisEventButtonVM analysisEventButton && analysisEventButton.TagMode == TagMode.Free) {
+				tempContext.ExpiredTimeAction = analysisEventButton.ToggleIsCategoryClicked;
 			} else {
 				tempContext.Duration = Constants.TEMP_TAGGING_DURATION;
 				tempContext.ExpiredTimeAction = buttonVM.Click;

@@ -18,6 +18,7 @@
 using System.Collections.Generic;
 using VAS.Core.Common;
 using VAS.Core.Events;
+using VAS.Core.MVVMC;
 using VAS.Core.Store;
 
 namespace VAS.Core.ViewModel
@@ -64,6 +65,24 @@ namespace VAS.Core.ViewModel
 		public EventTypeVM EventType {
 			get;
 			private set;
+		}
+
+		/// <summary>
+		/// Gets the subcategories of the event
+		/// </summary>
+		/// <value>The tags.</value>
+		public CollectionViewModel<Tag, TagVM> Tags {
+			get => EventType.Tags;
+		}
+
+		/// <summary>
+		/// Gets the selected tags.
+		/// </summary>
+		/// <value>The selected tags.</value>
+		public RangeObservableCollection<TagVM> SelectedTags {
+			get {
+				return Tags.Selection;
+			}
 		}
 
 		public virtual void Click ()

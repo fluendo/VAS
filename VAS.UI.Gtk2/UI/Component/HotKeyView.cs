@@ -64,7 +64,7 @@ namespace VAS.UI.Component
 		{
 			Log.Verbose ($"Destroying {GetType ()}");
 
-			ViewModel.Dispose ();
+			ViewModel?.Dispose ();
 			ViewModel = null;
 			ctx.Dispose ();
 			ctx = null;

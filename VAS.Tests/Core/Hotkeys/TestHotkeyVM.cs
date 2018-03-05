@@ -16,6 +16,7 @@
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
 using System;
+using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using VAS.Core.Interfaces.GUI;
@@ -49,7 +50,7 @@ namespace VAS.Tests.Core.Hotkeys
 		}
 
 		[Test ()]
-		public void TestChangeHotKeyProperties ()
+		public void SetHotkey_NonRestrictedHotKey_HotKeyChanged ()
 		{
 			//Action
 			viewModel.UpdateHotkeyCommand.Execute ();
@@ -57,6 +58,20 @@ namespace VAS.Tests.Core.Hotkeys
 			//Assert
 			Assert.AreEqual (hotkey.Modifier, viewModel.Modifier);
 			Assert.AreEqual (hotkey.Key, viewModel.Key);
+		}
+
+		[Test ()]
+		public void SetHotkey_RestrictedHotKey_HotKeyNotChanged ()
+		{
+			// Arrange
+			viewModel.RestrictedHotkeys = new HashSet<HotKey> { hotkey };
+
+			//Action
+			viewModel.UpdateHotkeyCommand.Execute ();
+
+			//Assert
+			Assert.AreNotEqual (hotkey.Modifier, viewModel.Modifier);
+			Assert.AreNotEqual (hotkey.Key, viewModel.Key);
 		}
 	}
 }

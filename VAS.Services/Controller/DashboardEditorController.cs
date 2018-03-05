@@ -39,15 +39,17 @@ namespace VAS.Services.Controller
 	{
 		List<AnalysisEventButtonVM> eventButtons;
 		internal KeyContext editDashboardKeyContext;
+		Dictionary<DashboardButton, HotKey> registeredHotkeys;
 
-		public DashboardEditorController()
+		public DashboardEditorController ()
 		{
 			eventButtons = new List<AnalysisEventButtonVM> ();
 			editDashboardKeyContext = new KeyContext ();
 			editDashboardKeyContext.AddAction (
 				new KeyAction (App.Current.HotkeysService.GetByName (GeneralUIHotkeys.DELETE),
-				               () => ViewModel.DeleteButton.Execute (ViewModel.Selection.FirstOrDefault ()), 10)
+							   () => ViewModel.DeleteButton.Execute (ViewModel.Selection.FirstOrDefault ()), 10)
 			);
+			registeredHotkeys = new Dictionary<DashboardButton, HotKey> ();
 		}
 
 		public override async Task Start ()
@@ -88,6 +90,7 @@ namespace VAS.Services.Controller
 		public override void SetViewModel (IViewModel viewModel)
 		{
 			ViewModel = ((IDashboardDealer)viewModel).Dashboard;
+			GetRegisteredHotkeys ();
 		}
 
 		void ConnectTagChanges ()
@@ -98,7 +101,7 @@ namespace VAS.Services.Controller
 			}
 		}
 
-		void DisconnectTagChanges()
+		void DisconnectTagChanges ()
 		{
 			foreach (var button in eventButtons) {
 				button.Tags.ViewModels.CollectionChanged -= HandleTagsCollectionChanged;
@@ -156,6 +159,23 @@ namespace VAS.Services.Controller
 				ConnectTagChanges ();
 			}
 
+			if (sender is DashboardButtonCollectionVM &&
+				ViewModel.NeedsSync (e.PropertyName, "Collection_" + nameof (ViewModel.ViewModels))) {
+				GetRegisteredHotkeys ();
+			}
+
+			if (sender is DashboardButtonVM dashboardButton &&
+				(ViewModel.NeedsSync (e.PropertyName, nameof (dashboardButton.HotKey.Key)) ||
+				ViewModel.NeedsSync (e.PropertyName, nameof (dashboardButton.HotKey.Modifier)))) {
+				registeredHotkeys [dashboardButton.Model] = dashboardButton.HotKey.Model;
+			}
+
+			if (sender is DashboardVM dashboard && ViewModel.NeedsSync (e.PropertyName,
+																		"Collection_" + nameof (ViewModel.Selection)) &&
+				dashboard.Selection.Count == 1) {
+				dashboard.Selection.First ().HotKey.RestrictedHotkeys = new HashSet<HotKey> (registeredHotkeys.Values);
+			}
+
 			if (ViewModel.NeedsSync (e.PropertyName, nameof (ViewModel.Mode), sender, ViewModel)) {
 				UpdateKeyContext ();
 			}
@@ -179,15 +199,15 @@ namespace VAS.Services.Controller
 
 		protected async Task HandleDeleteButton (DeleteEvent<DashboardButtonVM> evt)
 		{
-			DashboardButtonVM buttonVM = evt.Object;
-			if (buttonVM == null) {
-				return;
-			}
-
-			string msg = Catalog.GetString ("Do you want to delete: ") + buttonVM.Name + "?";
-			if (await App.Current.Dialogs.QuestionMessage (msg, null, this)) {
-				RemoveActionLinks (evt.Object);
-				ViewModel.ViewModels.Remove (evt.Object);
+			if (evt.Object is DashboardButtonVM buttonVM) {
+				string msg = Catalog.GetString ("Do you want to delete: ") + buttonVM.Name + "?";
+				if (await App.Current.Dialogs.QuestionMessage (msg, null, this)) {
+					if (registeredHotkeys.ContainsKey (buttonVM.Model)) {
+						registeredHotkeys.Remove (buttonVM.Model);
+					}
+					RemoveActionLinks (evt.Object);
+					ViewModel.ViewModels.Remove (evt.Object);
+				}
 			}
 		}
 
@@ -201,7 +221,7 @@ namespace VAS.Services.Controller
 			string msg = string.Format ("{0} {1} ?",
 										Catalog.GetString ("Do you want to delete: "), link.Name);
 			if (await App.Current.Dialogs.QuestionMessage (msg, null, this)) {
-				link.SourceButton.ActionLinks.ViewModels.Remove  (link);
+				link.SourceButton.ActionLinks.ViewModels.Remove (link);
 			}
 		}
 
@@ -210,6 +230,7 @@ namespace VAS.Services.Controller
 			DashboardButton button = CreateButton (evt.Name);
 
 			if (button != null) {
+				registeredHotkeys.Add (button, button.HotKey);
 				button.Position = new Point (ViewModel.CanvasWidth, 0);
 				ViewModel.Model.List.Add (button);
 			}
@@ -229,6 +250,9 @@ namespace VAS.Services.Controller
 				newButton.ActionLinks [i].DestinationButton =
 							 arg.Object.Model.ActionLinks [i].DestinationButton;
 			}
+
+			newButton.HotKey.Key = -1;
+			newButton.HotKey.Modifier = 0;
 
 			ViewModel.Model.List.Add (newButton);
 			arg.ReturnValue = ViewModel.ViewModels.Last ();
@@ -270,6 +294,19 @@ namespace VAS.Services.Controller
 				App.Current.KeyContextManager.AddContext (editDashboardKeyContext);
 			} else {
 				App.Current.KeyContextManager.RemoveContext (editDashboardKeyContext);
+			}
+		}
+
+		/// <summary>
+		/// Gets the used hotkeys by the buttons in the dashboard.
+		/// </summary>
+		void GetRegisteredHotkeys ()
+		{
+			registeredHotkeys.Clear ();
+			foreach (var button in ViewModel.ViewModels) {
+				if (button is DashboardButtonVM dashboardButton && dashboardButton.HotKey.Key != -1) {
+					registeredHotkeys.Add (dashboardButton.Model, dashboardButton.HotKey.Model);
+				}
 			}
 		}
 

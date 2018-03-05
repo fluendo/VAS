@@ -16,7 +16,9 @@
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
 //
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using VAS.Core.Hotkeys;
 using VAS.Core.MVVMC;
 using VAS.Core.Store;
 
@@ -29,6 +31,7 @@ namespace VAS.Core.ViewModel
 		{
 			UpdateHotkeyCommand = new Command ((Action)UpdateHotkey);
 			UpdateHotkeyCommand.Executable = true;
+			RestrictedHotkeys = new HashSet<HotKey> ();
 		}
 
 		/// <summary>
@@ -77,15 +80,22 @@ namespace VAS.Core.ViewModel
 		}
 
 		/// <summary>
+		/// Gets or sets the restricted hotkeys viewmodels.
+		/// </summary>
+		/// <value>The restricted hotkeys.</value>
+		public HashSet<HotKey> RestrictedHotkeys {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// Closes the window.
 		/// </summary>
 		public void UpdateHotkey ()
 		{
-			var hotkey = App.Current.GUIToolkit.SelectHotkey (Model);
-			if (hotkey != null) {
-				Model.Key = hotkey.Key;
-				Model.Modifier = hotkey.Modifier;
-			}
+			// FIXME: @vguzman is going to make a change with this when he merges his branch
+			HotKeyService hotkeyService = new HotKeyService ();
+			hotkeyService.SetHotkey (Model, RestrictedHotkeys);
 		}
 
 		protected override void ForwardPropertyChanged (object sender, PropertyChangedEventArgs e)

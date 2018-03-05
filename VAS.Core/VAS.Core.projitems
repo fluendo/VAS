@@ -288,6 +288,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Resources\Styles\Sizes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\LicenseBannerVM.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\Service\ILicenseCustomizationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\Services\IHotKeyService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Hotkeys\HotKeyService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Common\" />

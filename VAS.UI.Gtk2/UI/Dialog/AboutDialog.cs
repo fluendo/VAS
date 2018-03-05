@@ -100,8 +100,6 @@ namespace VAS.UI.Dialog
 			bindingContext.Add (this.Bind (v => v.Copyright, vm => ((AboutVM)vm).Copyright));
 			bindingContext.Add (this.Bind (v => v.Website, vm => ((AboutVM)vm).Website));
 			bindingContext.Add (this.Bind (v => v.License, vm => ((AboutVM)vm).License));
-			bindingContext.Add (this.Bind (v => v.Authors, vm => ((AboutVM)vm).Authors));
-			bindingContext.Add (this.Bind (v => v.TranslatorCredits, vm => ((AboutVM)vm).TranslatorCredits));
 		}
 	}
 }

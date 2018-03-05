@@ -357,11 +357,6 @@ namespace VAS
 			set;
 		}
 
-		public string Translators {
-			get;
-			set;
-		}
-
 		public string Copyright {
 			get;
 			set;

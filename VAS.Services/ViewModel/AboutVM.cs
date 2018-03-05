@@ -34,8 +34,6 @@ namespace VAS.Services.ViewModel
 			Copyright = App.Current.Copyright;
 			Website = App.Current.Website;
 			License = App.Current.License;
-			Authors = new string [] { "Andoni Morales Alastruey", "Fluendo" };
-			TranslatorCredits = App.Current.Translators;
 			WrapLicense = true;
 		}
 
@@ -44,8 +42,6 @@ namespace VAS.Services.ViewModel
 		public string Copyright { get; set; }
 		public string Website { get; set; }
 		public string License { get; set; }
-		public string [] Authors { get; set; }
-		public string TranslatorCredits { get; set; }
 		public bool WrapLicense { get; set; }
 	}
 }

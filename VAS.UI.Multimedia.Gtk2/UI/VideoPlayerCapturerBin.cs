@@ -112,9 +112,9 @@ namespace VAS.UI
 			capturerbox.Visible = true;
 		}
 
-		public virtual void Detach (bool attached)
+		public virtual void Detach (bool detached)
 		{
-			playerVM.PlayerAttached = attached;
+			playerVM.PlayerDetached = detached;
 		}
 
 		protected virtual void OnBacktolivebuttonClicked (object sender, System.EventArgs e)

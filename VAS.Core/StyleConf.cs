@@ -55,7 +55,12 @@ namespace VAS.Core.Common
 		public static string PlayerTooltipVolume = Catalog.GetString ("Volume");
 		public static string PlayerTooltipRate = Catalog.GetString ("Playback speed");
 		public static string PlayerTooltipJumps = Catalog.GetString ("Jump in seconds. Hold the Shift key with the direction keys to activate it.");
+		public static string PlayerTooltipAttach = Catalog.GetString ("Attach window");
 		public static string PlayerTooltipDetach = Catalog.GetString ("Detach window");
+
+		// Map Tooltips
+		public static string MapTooltipAttach = Catalog.GetString ("Attach map");
+		public static string MapTooltipDetach = Catalog.GetString ("Detach map");
 
 		public StyleConf ()
 		{

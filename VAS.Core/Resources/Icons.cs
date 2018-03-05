@@ -116,5 +116,8 @@ namespace VAS.Core.Resources
 
 		public const string VideoDevice = "vas-video-device";
 		public const string Plugin = "vas-plugin";
+
+		public const string Attach = "vas-control-attach";
+		public const string Detach = "vas-control-detach";
 	}
 }

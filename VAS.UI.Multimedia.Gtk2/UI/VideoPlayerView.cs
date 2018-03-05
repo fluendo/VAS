@@ -18,7 +18,6 @@
 //
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Gdk;
@@ -38,10 +37,9 @@ using VAS.Core.Resources.Styles;
 using VAS.Core.Store;
 using VAS.Core.Store.Playlists;
 using VAS.Core.ViewModel;
-using VAS.Drawing;
 using VAS.Drawing.Cairo;
-using VAS.Drawing.CanvasObjects;
 using VAS.Drawing.Widgets;
+using VAS.UI.Helpers;
 using VAS.UI.Helpers.Bindings;
 using DConstants = VAS.Drawing.Constants;
 using Image = VAS.Core.Common.Image;
@@ -672,8 +670,8 @@ namespace VAS.UI
 			if (ViewModel.NeedsSync (e, nameof (ViewModel.ControlsSensitive))) {
 				controlsbox.Sensitive = rateLevelButton.Sensitive = playerVM.ControlsSensitive;
 			}
-			if (ViewModel.NeedsSync (e, nameof (ViewModel.PlayerAttached))) {
-				HandlePlayerAttachedChanged ();
+			if (ViewModel.NeedsSync (e, nameof (ViewModel.PlayerDetached))) {
+				HandlePlayerDetachedChanged ();
 			}
 			if (ViewModel.NeedsSync (e, nameof (ViewModel.Playing))) {
 				HandlePlayingChanged ();
@@ -834,16 +832,18 @@ namespace VAS.UI
 				mode == PlayerViewOperationMode.SimpleWithControls;
 		}
 
-		void HandlePlayerAttachedChanged ()
+		void HandlePlayerDetachedChanged ()
 		{
-			if (playerVM.PlayerAttached) {
-				detachbuttonimage.Image = App.Current.ResourcesLocator.LoadIcon ("vas-control-attach",
-																				 Sizes.PlayerCapturerIconSize);
-				detachbutton.TooltipMarkup = Catalog.GetString ("Attach window");
+			if (playerVM.PlayerDetached) {
+				detachbutton.SetImage (App.Current.ResourcesLocator.LoadIcon (Icons.Attach,
+																			  Sizes.PlayerCapturerIconSize));
+
+				detachbutton.TooltipMarkup = StyleConf.PlayerTooltipAttach;
 			} else {
-				detachbuttonimage.Image = App.Current.ResourcesLocator.LoadIcon ("vas-control-detach",
-																				 Sizes.PlayerCapturerIconSize);
-				detachbutton.TooltipMarkup = Catalog.GetString ("Detach window");
+				detachbutton.SetImage (App.Current.ResourcesLocator.LoadIcon (Icons.Detach,
+																			  Sizes.PlayerCapturerIconSize));
+
+				detachbutton.TooltipMarkup = StyleConf.PlayerTooltipDetach;
 			}
 		}
 
@@ -875,15 +875,13 @@ namespace VAS.UI
 		{
 			// calculate the width of the time label 
 			int timeTextWidth, timeTextHeight;
-			App.Current.DrawingToolkit.MeasureText("00:00:00,000", out timeTextWidth, out timeTextHeight, App.Current.Style.Font, 12, FontWeight.Normal);
+			App.Current.DrawingToolkit.MeasureText ("00:00:00,000", out timeTextWidth, out timeTextHeight, App.Current.Style.Font, 12, FontWeight.Normal);
 			currentTimeArea.WidthRequest = timeTextWidth;
 			totalTimeArea.WidthRequest = timeTextWidth;
-			currentTime = new TextView (new WidgetWrapper (currentTimeArea))
-				{ FontSize = 12, TextColor = App.Current.Style.TextBase, FontSlant = FontSlant.Normal };
-			totalTime = new TextView (new WidgetWrapper (totalTimeArea))
-				{ FontSize = 10, TextColor = App.Current.Style.TextBaseSecondary, FontSlant = FontSlant.Normal };
+			currentTime = new TextView (new WidgetWrapper (currentTimeArea)) { FontSize = 12, TextColor = App.Current.Style.TextBase, FontSlant = FontSlant.Normal };
+			totalTime = new TextView (new WidgetWrapper (totalTimeArea)) { FontSize = 10, TextColor = App.Current.Style.TextBaseSecondary, FontSlant = FontSlant.Normal };
 		}
-			
+
 		void HandleFileSetChanged ()
 		{
 			if (ViewModel.FileSet != null) {

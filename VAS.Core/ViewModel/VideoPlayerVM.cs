@@ -431,10 +431,10 @@ namespace VAS.Core.ViewModel
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether this <see cref="T:VAS.Core.ViewModel.VideoPlayerVM"/> player attached.
+		/// Gets or sets a value indicating whether the <see cref="T:VAS.Core.ViewModel.VideoPlayerVM"/> is detached.
 		/// </summary>
-		/// <value><c>true</c> if player attached; otherwise, <c>false</c>.</value>
-		public bool PlayerAttached {
+		/// <value><c>true</c> if player detached; otherwise, <c>false</c>.</value>
+		public bool PlayerDetached {
 			set;
 			get;
 		}

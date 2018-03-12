@@ -192,6 +192,7 @@ namespace VAS.Core.Store
 		}
 
 		[PropertyChanged.DoNotNotify]
+		[CloneIgnore]
 		[JsonIgnore]
 		public Project Project {
 			get;
@@ -229,6 +230,7 @@ namespace VAS.Core.Store
 		/// List of players tagged in this event.
 		/// </summary>
 		[PropertyIndex (0)]
+		[CloneIgnore]
 		[JsonProperty]
 		public RangeObservableCollection<Player> Players {
 			get;
@@ -495,7 +497,9 @@ namespace VAS.Core.Store
 			var newplay = Cloner.Clone (this);
 			newplay.ID = Guid.NewGuid ();
 			newplay.EventType = EventType;
-			newplay.Players = Players;
+			newplay.Players = new RangeObservableCollection<Player> (Players);
+			newplay.Project = Project;
+
 			return newplay;
 		}
 

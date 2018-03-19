@@ -111,12 +111,11 @@ namespace VAS.UI.Helpers
 			var width = (int)(monitor_geometry.Width * screenPercentage);
 			var height = (int)(monitor_geometry.Height * screenPercentage);
 			window.Resize (width, height);
-
-			if (Utils.OS == OperatingSystemID.OSX) {
-				var position = (1 - screenPercentage) / 2;
-				window.Move ((int)(monitor_geometry.X + monitor_geometry.Width * position),
+			// Center the window
+			var position = (1 - screenPercentage) / 2;
+			window.Move ((int)(monitor_geometry.X + monitor_geometry.Width * position),
 							 (int)(monitor_geometry.Y + monitor_geometry.Height * position));
-			}
+
 		}
 
 		static void Clamp (ref int @base, int extent, int clampBase, int clampExtent)

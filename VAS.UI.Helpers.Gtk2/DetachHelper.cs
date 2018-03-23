@@ -30,10 +30,10 @@ namespace VAS.UI.Helpers.Gtk2
 		ExternalWindow externalWindow;
 
 		protected override void DisposeManagedResources ()
-		{
+		{        
 			base.DisposeManagedResources ();
 			if (externalWindow != null) {
-				externalWindow.Destroy ();
+				externalWindow.Dispose ();
 			}
 		}
 
@@ -62,7 +62,7 @@ namespace VAS.UI.Helpers.Gtk2
 			} else {
 				Log.Debug ("Attaching widget again");
 				widgetToDetach.Reparent (widgetWhereReattach);
-				externalWindow.Destroy ();
+				externalWindow.Dispose();
 				externalWindow = null;
 			}
 

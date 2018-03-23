@@ -59,6 +59,37 @@ namespace VAS.UI
 			Misc.SetFocus (this, false);
 		}
 
+		public override void Dispose ()
+		{
+			Dispose (true);
+			base.Dispose ();
+		}
+
+		protected virtual void Dispose (bool disposing)
+		{
+			if (Disposed) {
+				return;
+			}
+			if (disposing) {
+				Destroy ();
+			}
+			Disposed = true;
+		}
+
+		protected bool Disposed { get; private set; } = false;
+
+		protected override void OnDestroyed ()
+		{
+			morebutton.Clicked -= OnMorebuttonClicked;
+			lessbutton.Clicked -= OnLessbuttonClicked;
+			scale.ValueChanged -= OnScaleValueChanged;
+			scale.FormatValue -= HandleScaleFormatValue;
+			scale.ButtonPressEvent -= HandleScaleFormatValue;
+			scale.ButtonReleaseEvent -= HandleScaleFormatValue;
+			base.OnDestroyed ();
+			Disposed = true;
+		}
+
 		/// <summary>
 		/// Gets or sets the function that formats the returned value.
 		/// </summary>

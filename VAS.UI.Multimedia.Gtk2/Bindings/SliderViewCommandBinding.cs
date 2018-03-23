@@ -18,6 +18,7 @@
 using System;
 using System.Linq.Expressions;
 using Gtk;
+using VAS.Core.Common;
 using VAS.Core.Interfaces.MVVMC;
 using VAS.Core.MVVMC;
 using VAS.UI;
@@ -51,6 +52,12 @@ namespace VAS.Bindings
 
 			if (propertyExpression != null && updateViewAction != null)
 				propBinding = new OneWayPropertyBinding<double, double> (propertyExpression, updateViewAction);
+		}
+
+		protected override void DisposeManagedResources ()
+		{
+			base.DisposeManagedResources ();
+			propBinding?.Dispose ();
 		}
 
 		protected override void BindViewModel ()

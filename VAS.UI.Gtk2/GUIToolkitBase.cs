@@ -291,11 +291,14 @@ namespace VAS.UI
 		protected bool ShowModalWindow (IPanel panel, IPanel parent)
 		{
 			Window parentWindow = null;
-			foreach (var window in Window.ListToplevels ()) {
-				if (window.IsActive) {
-					parentWindow = window;
-					break;
+			try {
+				foreach (var window in Window.ListToplevels ()) {
+					if (window.IsActive) {
+						parentWindow = window;
+					}
 				}
+			} catch (GLib.MissingIntPtrCtorException ex) {
+				Log.Exception (ex, true);
 			}
 			var dialog = panel as Gtk.Dialog;
 			if (dialog != null) {

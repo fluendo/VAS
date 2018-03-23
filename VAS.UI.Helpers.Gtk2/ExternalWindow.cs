@@ -47,6 +47,31 @@ namespace VAS.UI.Helpers
 			box.Show ();
 		}
 
+		public override void Dispose ()
+		{
+			Dispose (true);
+			base.Dispose ();
+		}
+
+		protected virtual void Dispose (bool disposing)
+		{
+			if (Disposed) {
+				return;
+			}
+			if (disposing) {
+				Destroy ();
+			}
+			Disposed = true;
+		}
+
+		protected bool Disposed { get; private set; } = false;
+
+		protected override void OnDestroyed ()
+		{
+			box?.Dispose();
+			base.OnDestroyed();
+		}
+
 		public Widget Box {
 			get {
 				return box;

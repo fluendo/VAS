@@ -42,6 +42,15 @@ namespace VAS.Drawing.CanvasObjects.Timeline
 			trimGrabberRightInactive = App.Current.DrawingToolkit.CreateSurfaceFromIcon (Icons.PlayerControlTrimRightInactive);
 		}
 
+		protected override void DisposeManagedResources ()
+		{
+			trimGrabberLeftActive.Dispose ();
+			trimGrabberLeftInactive.Dispose ();
+			trimGrabberRightActive.Dispose ();
+			trimGrabberRightInactive.Dispose ();
+			base.DisposeManagedResources ();
+		}
+
 		public TimeNodeVM ViewModel {
 			get {
 				return TimeNode;

@@ -142,6 +142,25 @@ namespace VAS.UI
 
 		#endregion
 
+		public override void Dispose ()
+		{
+			Dispose (true);
+			base.Dispose ();
+		}
+
+		protected virtual void Dispose (bool disposing)
+		{
+			if (Disposed) {
+				return;
+			}
+			if (disposing) {
+				Destroy ();
+			}
+			Disposed = true;
+		}
+
+		protected bool Disposed { get; private set; } = false;
+
 		protected override void OnDestroyed ()
 		{
 			if (dragTimerID != 0) {
@@ -167,7 +186,11 @@ namespace VAS.UI
 			rateWindow = null;
 			ViewModel = null;
 
+			ctx.Dispose ();
+			ctx = null;
+
 			base.OnDestroyed ();
+			Disposed = true;
 		}
 
 		public void SetViewModel (object viewModel)
@@ -184,13 +207,14 @@ namespace VAS.UI
 					playerVM.PropertyChanged -= PlayerVMPropertyChanged;
 				}
 				playerVM = value;
+				ctx?.UpdateViewModel (playerVM);
+
 				if (playerVM != null) {
 					timerule.ViewModel = playerVM;
 					eventEditionTimerule.ViewModel = playerVM;
 					playerVM.PropertyChanged += PlayerVMPropertyChanged;
 					Reset ();
 					playerVM.Sync ();
-					ctx.UpdateViewModel (playerVM);
 				}
 			}
 		}

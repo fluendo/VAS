@@ -426,9 +426,7 @@ namespace VAS.Drawing.Widgets
 			case DrawTool.Player: {
 					int width, heigth;
 					Text text = new Text (MoveStart, 1, 1, "");
-					if (ConfigureObjectEvent != null) {
-						ConfigureObjectEvent (text, Tool);
-					}
+					ConfigureObjectEvent?.Invoke (text, Tool);
 					if (text.Value == null) {
 						return;
 					}
@@ -439,8 +437,13 @@ namespace VAS.Drawing.Widgets
 					text.TextColor = TextColor.Copy ();
 					text.FillColor = text.StrokeColor = TextBackgroundColor.Copy ();
 					text.TextSize = FontSize;
-					resize = copycolor = sele = false;
+					copycolor = false;
 					drawable = text;
+					Tool = DrawTool.Selection;
+					// FIXME: The modal popup somehow does not allow the StopMove to be called. 
+					// We want the text object to be still and selected so we use SelectionPosition.New 
+					// so the widget won't be able to move the object around on creation
+					pos = SelectionPosition.New;
 					break;
 				}
 			case DrawTool.Pen:

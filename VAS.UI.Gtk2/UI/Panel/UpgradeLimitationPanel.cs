@@ -57,7 +57,7 @@ namespace VAS.UI.Panel
 		{
 			this.Build ();
 
-			eventbox.ModifyBg (StateType.Normal, Helpers.Misc.ToGdkColor (App.Current.Style.ScreenBase));
+			eventbox.ModifyBg (StateType.Normal, Helpers.Misc.ToGdkColor (App.Current.Style.ThemeBase));
 			header.ModifyFont (FontDescription.FromString ($"{App.Current.Style.Font} normal {HEADER_LABEL_SIZE}px"));
 			featuresHeader.ModifyFont (FontDescription.FromString ($"{App.Current.Style.Font} light {FEATURE_HEADER_LABEL_SIZE}px"));
 			featuresCaption.ModifyFont (FontDescription.FromString ($"{App.Current.Style.Font} light {FEATURE_LABEL_SIZE}px"));

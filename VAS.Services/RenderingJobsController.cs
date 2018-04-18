@@ -198,7 +198,7 @@ namespace VAS.Services
 			foreach (MediaFile file in job.InputFiles) {
 				PlaylistVideo video = new PlaylistVideo (file);
 				Log.Debug ("Convert video " + video.File.FilePath);
-				videoEditor.AddSegment (video.File.FilePath, 0, -1, 1, "", video.File.HasAudio, new Area ());
+				videoEditor.AddSegment (video.File.FilePath, 0, file.Duration.MSeconds, 1, "", video.File.HasAudio, new Area ());
 			}
 
 			videoEditor.Start ();

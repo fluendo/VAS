@@ -1627,6 +1627,9 @@ namespace VAS.Services
 		protected virtual void HandleStateChange (PlaybackStateChangedEvent e)
 		{
 			App.Current.GUIToolkit.Invoke (delegate {
+				if (Disposed) {
+					return;
+				}
 				if (e.Playing) {
 					ReconfigureTimeout (TIMEOUT_MS);
 				} else {
@@ -1643,6 +1646,9 @@ namespace VAS.Services
 		protected virtual void HandleReadyToSeek (object sender)
 		{
 			App.Current.GUIToolkit.Invoke (delegate {
+				if (Disposed) {
+					return;
+				}
 				readyToSeek = true;
 				if (pendingSeek != null) {
 					SetRate (pendingSeek.rate);
@@ -1661,6 +1667,9 @@ namespace VAS.Services
 		protected virtual void HandleEndOfStream (object sender)
 		{
 			App.Current.GUIToolkit.Invoke (delegate {
+				if (Disposed) {
+					return;
+				}
 				if (loadedPlaylistElement is PlaylistVideo) {
 					Next ();
 				} else {
@@ -1705,6 +1714,9 @@ namespace VAS.Services
 		protected virtual void HandleTimeout (Object state)
 		{
 			App.Current.GUIToolkit.Invoke (delegate {
+				if (Disposed) {
+					return;
+				}
 				if (!IgnoreTicks) {
 					Tick ();
 				}
@@ -1714,6 +1726,9 @@ namespace VAS.Services
 		protected virtual void HandleSeekEvent (SeekType type, Time start, float rate)
 		{
 			App.Current.GUIToolkit.Invoke (delegate {
+				if (Disposed) {
+					return;
+				}
 				EmitLoadDrawings (null);
 				/* We only use it for backwards framestepping for now */
 				if (type == SeekType.StepDown || type == SeekType.StepUp) {

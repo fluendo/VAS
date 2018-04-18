@@ -305,7 +305,7 @@ namespace VAS.Services.Controller
 			}
 		}
 
-		async Task DeletePlays (IEnumerable<TimelineEvent> plays, bool askConfirmation = true)
+		public virtual async Task<bool> DeletePlays (IEnumerable<TimelineEvent> plays, bool askConfirmation = true)
 		{
 			plays = plays.Where (p => p.Deletable);
 			Log.Debug (plays.Count () + " plays deleted");
@@ -314,7 +314,7 @@ namespace VAS.Services.Controller
 					Catalog.GetString (String.Format ("Do you want to delete {0} event(s)?", plays.Count ())),
 												null);
 				if (!delete) {
-					return;
+					return false;
 				}
 			}
 			Project.Timeline.Model.RemoveRange (plays);
@@ -324,6 +324,7 @@ namespace VAS.Services.Controller
 			if (LoadedPlay != null && plays.Contains (LoadedPlay)) {
 				await App.Current.EventsBroker.Publish (new LoadEventEvent ());
 			}
+			return true;
 		}
 
 		void Save (ProjectVM project)

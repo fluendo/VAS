@@ -202,6 +202,34 @@ namespace VAS.Tests.Core.Common
 			Assert.AreNotEqual (test.OnlyPublicGetterString, test2.OnlyPublicGetterString);
 			Assert.AreNotEqual (test.OnlyGetterString, test2.OnlyGetterString);
 		}
+
+		[Test ()]
+		public void TestClone_IsLoadedFalse_RetStorableIsLoadedFalse ()
+		{
+			// Arrange
+			var project = new DummyProject ();
+			project.IsLoaded = false;
+
+			// Action
+			var project2 = project.Clone ();
+
+			// Assert
+			Assert.IsFalse (project2.IsLoaded);
+		}
+
+		[Test ()]
+		public void TestClone_IsLoadedTrue_RetStorableIsLoadedTrue ()
+		{
+			// Arrange
+			var project = new DummyProject ();
+			project.IsLoaded = true;
+
+			// Action
+			var project2 = project.Clone ();
+
+			// Assert
+			Assert.IsTrue (project2.IsLoaded);
+		}
 	}
 
 	class DummyTeam : Team

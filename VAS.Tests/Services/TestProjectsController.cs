@@ -90,19 +90,6 @@ namespace VAS.Tests.Services
 		}
 
 		[Test]
-		public async Task SelectionChanged_ProjectSelected_ProjectLoadedStateful ()
-		{
-
-			await controller.Start ();
-
-			controller.ViewModel.Select (controller.ViewModel.ViewModels.First ());
-
-			Assert.AreNotEqual (controller.ViewModel.ViewModels.First (), controller.ViewModel.LoadedProject);
-			Assert.AreSame (controller.ViewModel.ViewModels.First ().Model, controller.ViewModel.LoadedProject.Model);
-			Assert.IsTrue (controller.ViewModel.LoadedProject.Stateful);
-		}
-
-		[Test]
 		public async Task SelectionChanged_ProjectUnselected_ProjectUnloaded ()
 		{
 			controller.ViewModel.Select (controller.ViewModel.ViewModels.First ());
@@ -129,11 +116,11 @@ namespace VAS.Tests.Services
 			controller.ViewModel.Select (controller.ViewModel.ViewModels.Skip (1).First ());
 
 			// Assert
-			storageMock.Verify (s => s.Store (firstLoadedProject.Model, false), Times.Once ());
+			DummyProjectVM projectVM = controller.ViewModel.ViewModels.FirstOrDefault (vm => vm.Model.ID.Equals (firstLoadedProject.Model.ID));
+			storageMock.Verify (s => s.Store (projectVM.Model, false), Times.Once ());
 			Assert.AreNotEqual (firstLoadedProject, controller.ViewModel.LoadedProject);
 			Assert.AreNotSame (firstLoadedProject.Model, controller.ViewModel.LoadedProject.Model);
-			Assert.IsTrue (controller.ViewModel.LoadedProject.Stateful);
-			Assert.IsFalse (firstLoadedProject.Model.IsChanged);
+			Assert.IsFalse (projectVM.Model.IsChanged);
 			Assert.AreEqual (ProjectType.URICaptureProject, firstLoadedProject.ProjectType);
 			Assert.AreEqual (ProjectType.URICaptureProject, firstLoadedProject.Model.ProjectType);
 		}

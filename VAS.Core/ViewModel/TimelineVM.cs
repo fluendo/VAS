@@ -83,13 +83,6 @@ namespace VAS.Core.ViewModel
 			Filters.IgnoreEvents = true;
 			EventTypesTimeline.IgnoreEvents = true;
 			FullTimeline.IgnoreEvents = true;
-			if (Model != null) {
-				Model.IgnoreEvents = true;
-			}
-			base.DisposeManagedResources ();
-			if (Model != null) {
-				Model.Clear ();
-			}
 			if (eventTypes != null) {
 				eventTypes.ViewModels.CollectionChanged -= HandleEventTypesCollectionChanged;
 			}
@@ -104,6 +97,7 @@ namespace VAS.Core.ViewModel
 			EventTypesTimeline = null;
 			FullTimeline = null;
 			TeamsTimeline = null;
+			base.DisposeManagedResources ();
 		}
 
 		/// <summary>

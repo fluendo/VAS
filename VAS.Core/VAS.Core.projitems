@@ -270,7 +270,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVMC\PropertyToPropertyBinding.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVMC\BindingsExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\ResourcesLocatorBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\MVVMC\IStateful.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel\TagVM.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPlaylistEventElement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVMC\KeyUpdaterCollectionViewModel.cs" />

@@ -45,9 +45,7 @@ namespace VAS.Tests.Core.ViewModel
 		public void TestOnlyPreloadedPropertiesSynced ()
 		{
 			DummyStorableVM viewModel = new DummyStorableVM ();
-			var model = new StorableBase ();
-			model.IsLoaded = false;
-			viewModel.Model = model;
+			viewModel.Model = new StorableBase { IsLoaded = false };
 
 			Assert.IsTrue (viewModel.SyncPreloadedCalled);
 			Assert.IsFalse (viewModel.SyncLoadedCalled);

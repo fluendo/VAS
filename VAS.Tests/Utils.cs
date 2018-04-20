@@ -261,10 +261,6 @@ namespace VAS.Tests
 				return teams;
 			}
 		}
-
-		public override void CommitState ()
-		{
-		}
 	}
 
 	public class DummyTeam : Team

@@ -205,7 +205,7 @@ namespace VAS.Core.ViewModel
 		}
 	}
 
-	public abstract class ProjectVM<TProject> : ProjectVM, IViewModel<TProject>, IStateful
+	public abstract class ProjectVM<TProject> : ProjectVM, IViewModel<TProject>
 		where TProject : Project
 	{
 		[PropertyChanged.DoNotCheckEquality]
@@ -217,12 +217,5 @@ namespace VAS.Core.ViewModel
 				base.Model = value;
 			}
 		}
-
-		public bool Stateful {
-			get;
-			set;
-		}
-
-		public abstract void CommitState ();
 	}
 }

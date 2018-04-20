@@ -30,9 +30,15 @@ namespace VAS.Core.Common
 		{
 			IStorable storable = source as IStorable;
 			T retStorable;
+			bool storableLoaded = false;
 
 			if (Object.ReferenceEquals (source, null)) {
 				return default (T);
+			}
+
+			if (storable != null) {
+				storableLoaded = storable.IsLoaded;
+				storable.IsLoaded = true;
 			}
 
 			// Binary deserialization fails in mobile platforms because of
@@ -48,6 +54,8 @@ namespace VAS.Core.Common
 			retStorable = Serializer.Instance.Clone (source, type);
 			if (storable != null) {
 				(retStorable as IStorable).Storage = storable.Storage;
+				(retStorable as IStorable).IsLoaded = storableLoaded;
+				storable.IsLoaded = storableLoaded;
 			}
 			return retStorable;
 		}

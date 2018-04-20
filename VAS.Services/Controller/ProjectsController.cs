@@ -168,9 +168,11 @@ namespace VAS.Services.Controller
 
 				// Load the model, creating a copy to edit changes in a different viewmodel in case the user
 				// does not want to save them.
-				ViewModel.LoadedProject = new TViewModel { Model = selectedVM.Model, Stateful = true };
+				ViewModel.LoadedProject = new TViewModel { Model = selectedVM.Model.Clone () };
 				originalMediaFileSet = ViewModel.LoadedProject.FileSet.Model.Clone ();
+				ViewModel.LoadedProject.Model.IsChanged = false;
 				ViewModel.LoadedProject.IsChanged = false;
+				selectedVM.Model.IsChanged = false;
 			}
 
 			//Update commands
@@ -193,13 +195,17 @@ namespace VAS.Services.Controller
 				}
 			}
 			try {
+				// Update the ViewModel with the model clone used for editing
+				TViewModel projectVM = ViewModel.ViewModels.FirstOrDefault (vm => vm.Model.ID.Equals (project.Model.ID));
+				projectVM.Model = project.Model;
+
 				IBusyDialog busy = App.Current.Dialogs.BusyDialog (Catalog.GetString ("Saving project..."), null);
-				busy.ShowSync (() => {
-					project.CommitState ();
-					App.Current.DatabaseManager.ActiveDB.Store (project.Model);
-					project.IsChanged = false;
-					project.Model.IsChanged = false;
+				busy.ShowSync (async () => {
+					await project.LoadModel ();
+					App.Current.DatabaseManager.ActiveDB.Store (projectVM.Model);
 				});
+
+				projectVM.Model.IsChanged = false;
 				ViewModel.SaveCommand.EmitCanExecuteChanged ();
 				return true;
 			} catch (Exception ex) {

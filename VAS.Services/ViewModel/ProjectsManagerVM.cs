@@ -19,6 +19,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using VAS.Core;
+using VAS.Core.Common;
 using VAS.Core.Events;
 using VAS.Core.License;
 using VAS.Core.MVVMC;
@@ -118,7 +119,7 @@ namespace VAS.Services.ViewModel
 
 		public async Task<bool> Export (string format)
 		{
-			TModel template = Selection.FirstOrDefault ()?.Model;
+			TModel template = Selection.FirstOrDefault ()?.Model.Clone ();
 			if (template != null) {
 				return await App.Current.EventsBroker.PublishWithReturn (new ExportEvent<TModel> { Object = template, Format = format });
 			}

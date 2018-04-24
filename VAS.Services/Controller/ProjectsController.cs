@@ -162,7 +162,7 @@ namespace VAS.Services.Controller
 			TViewModel selectedVM = ViewModel.Selection.FirstOrDefault ();
 
 			if (selectedVM != null) {
-				if (ViewModel.LoadedProject.Model != null && ViewModel.LoadedProject.IsChanged) {
+				if (ViewModel.LoadedProject.Model != null && ViewModel.LoadedProject.Edited) {
 					await Save (ViewModel.LoadedProject, false);
 				}
 
@@ -197,17 +197,15 @@ namespace VAS.Services.Controller
 				}
 			}
 			try {
-				// Update the ViewModel with the model clone used for editing
-				TViewModel projectVM = ViewModel.ViewModels.FirstOrDefault (vm => vm.Model.ID.Equals (project.Model.ID));
-				projectVM.Model = project.Model;
-
 				IBusyDialog busy = App.Current.Dialogs.BusyDialog (Catalog.GetString ("Saving project..."), null);
 				busy.ShowSync (async () => {
 					await project.LoadModel ();
-					App.Current.DatabaseManager.ActiveDB.Store (projectVM.Model);
+					App.Current.DatabaseManager.ActiveDB.Store (project.Model);
 				});
 
-				projectVM.Model.IsChanged = false;
+				// Update the ViewModel with the model clone used for editing
+				TViewModel projectVM = ViewModel.ViewModels.FirstOrDefault (vm => vm.Model.ID.Equals (project.Model.ID));
+				projectVM.Model = App.Current.DatabaseManager.ActiveDB.RetrieveAll<TModel> ().First (p => p.ID == project.Model.ID);
 				ViewModel.SaveCommand.EmitCanExecuteChanged ();
 				return true;
 			} catch (Exception ex) {

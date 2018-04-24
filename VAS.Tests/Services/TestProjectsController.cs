@@ -110,7 +110,7 @@ namespace VAS.Tests.Services
 
 			DummyProjectVM firstLoadedProject = controller.ViewModel.ViewModels.First ();
 			controller.ViewModel.Select (firstLoadedProject);
-			controller.ViewModel.LoadedProject.ProjectType = ProjectType.URICaptureProject;
+			controller.ViewModel.LoadedProject.Model.IsChanged = true;
 
 			// Act
 			controller.ViewModel.Select (controller.ViewModel.ViewModels.Skip (1).First ());
@@ -120,9 +120,6 @@ namespace VAS.Tests.Services
 			storageMock.Verify (s => s.Store (projectVM.Model, false), Times.Once ());
 			Assert.AreNotEqual (firstLoadedProject, controller.ViewModel.LoadedProject);
 			Assert.AreNotSame (firstLoadedProject.Model, controller.ViewModel.LoadedProject.Model);
-			Assert.IsFalse (projectVM.Model.IsChanged);
-			Assert.AreEqual (ProjectType.URICaptureProject, firstLoadedProject.ProjectType);
-			Assert.AreEqual (ProjectType.URICaptureProject, firstLoadedProject.Model.ProjectType);
 		}
 	}
 }

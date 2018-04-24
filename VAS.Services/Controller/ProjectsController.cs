@@ -184,13 +184,15 @@ namespace VAS.Services.Controller
 
 		protected async Task<bool> Save (TViewModel project, bool force)
 		{
-			if (!project.IsChanged) {
+			if (!project.Edited) {
 				return false;
 			}
 			if (!force) {
 				string msg = Catalog.GetString ("Do you want to save the current project?");
 				if (!(await App.Current.Dialogs.QuestionMessage (msg, null, this))) {
-					ViewModel.LoadedProject.FileSet.Model.MediaFiles.Reset (originalMediaFileSet.MediaFiles);
+					if (originalMediaFileSet != null) {
+						ViewModel.LoadedProject.FileSet.Model.MediaFiles.Reset (originalMediaFileSet.MediaFiles);
+					}
 					return false;
 				}
 			}

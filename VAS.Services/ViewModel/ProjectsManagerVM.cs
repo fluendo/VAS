@@ -40,7 +40,7 @@ namespace VAS.Services.ViewModel
 			NewCommand = new Command (New);
 			OpenCommand = new AsyncCommand<TViewModel> (Open, (arg) => Selection.Count == 1);
 			DeleteCommand = new AsyncCommand (Delete, () => Selection.Any ());
-			SaveCommand = new AsyncCommand (Save, () => LoadedProject?.Model != null && LoadedProject.IsChanged);
+			SaveCommand = new AsyncCommand (Save, () => LoadedProject?.Model != null && LoadedProject.Edited);
 			ExportCommand = new AsyncCommand (Export, () => Selection.Count == 1);
 		}
 

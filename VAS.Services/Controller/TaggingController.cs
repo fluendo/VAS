@@ -229,6 +229,8 @@ namespace VAS.Services.Controller
 			foreach (var team in project.Teams) {
 				team.Tagged = false;
 			}
+
+			project.Dashboard.ViewModels.OfType<TagButtonVM> ().ToList ().ForEach (tb => tb.Active = false);
 		}
 
 		void HandleVideoPlayerPropertyChanged (object sender, PropertyChangedEventArgs e)

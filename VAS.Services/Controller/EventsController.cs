@@ -123,8 +123,7 @@ namespace VAS.Services.Controller
 		{
 			bool limitation = false;
 			var eventLimitation = VASCountLimitedObjects.TimelineEvents.ToString ();
-			if (!App.Current.LicenseLimitationsService.CanExecute (eventLimitation))
-			{
+			if (!App.Current.LicenseLimitationsService.CanExecute (eventLimitation)) {
 				App.Current.LicenseLimitationsService.MoveToUpgradeDialog (eventLimitation);
 				limitation = true;
 			}
@@ -163,7 +162,7 @@ namespace VAS.Services.Controller
 
 		async Task HandleNewDashboardEvent (NewDashboardEvent e)
 		{
-			if (CheckTimelineEventsLimitation()) {
+			if (CheckTimelineEventsLimitation ()) {
 				return;
 			}
 			if (Project == null)
@@ -177,10 +176,12 @@ namespace VAS.Services.Controller
 			}
 
 			if (!Project.Model.Dashboard.DisablePopupWindow && e.Edit) {
-				e.TimelineEvent.AddDefaultPositions ();
 
 				PlayEventEditionSettings settings = new PlayEventEditionSettings () {
-					EditTags = true, EditNotes = true, EditPlayers = true, EditPositions = true
+					EditTags = true,
+					EditNotes = true,
+					EditPlayers = true,
+					EditPositions = true
 				};
 
 				if (Project.ProjectType == ProjectType.FileProject) {
@@ -201,7 +202,9 @@ namespace VAS.Services.Controller
 			Project.Model.AddEvent (e.TimelineEvent);
 			AddNewPlay (e.TimelineEvent);
 			await App.Current.EventsBroker.Publish (new DashboardEventCreatedEvent {
-				TimelineEvent = e.TimelineEvent, DashboardButton = e.DashboardButton, DashboardButtons = e.DashboardButtons
+				TimelineEvent = e.TimelineEvent,
+				DashboardButton = e.DashboardButton,
+				DashboardButtons = e.DashboardButtons
 			});
 		}
 
@@ -259,8 +262,8 @@ namespace VAS.Services.Controller
 		void HandleLoadEventType (LoadTimelineEventEvent<EventTypeTimelineVM> e)
 		{
 			var timelineEvents = e.Object.ViewModels.Where ((arg) => arg.Visible == true)
-			                      .Select ((arg) => arg.Model)
-			                      .OrderBy (evt => evt.Start);
+								  .Select ((arg) => arg.Model)
+								  .OrderBy (evt => evt.Start);
 			VideoPlayer.LoadEvents (timelineEvents, e.Playing);
 		}
 

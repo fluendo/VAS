@@ -162,6 +162,17 @@ namespace VAS.Core.ViewModel
 			}
 			return ret;
 		}
+
+		public void SetDefaultCoordinatesOnField ()
+		{
+			if (Model?.EventType != null &&
+				(Model.EventType.TagFieldPosition && Model.FieldPosition == null ||
+				Model.EventType.TagHalfFieldPosition && Model.HalfFieldPosition == null ||
+				Model.EventType.TagGoalPosition && Model.GoalPosition == null)) {
+				Model.AddDefaultPositions ();
+			}
+		}
+
 	}
 
 	/// <summary>

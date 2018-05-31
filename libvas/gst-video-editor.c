@@ -526,8 +526,14 @@ gst_video_editor_add_segment (GstVideoEditor * gve, gchar * file,
       GST_TIME_FORMAT "} ", GST_TIME_ARGS (gve->priv->duration),
       GST_TIME_ARGS (duration));
 
-  if (duration != -1)
-    gve->priv->duration += duration;
+  if (duration != -1) {
+    if (gve->priv->duration >= 0)
+      gve->priv->duration += duration;
+  } else {
+    /* if some of the segments has unknown duration
+       we force the fallback to source progress reporting */
+    gve->priv->duration = -1;
+  }
 }
 
 void

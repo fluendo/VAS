@@ -130,7 +130,7 @@ namespace VAS.Services
 			IEnumerable<Job> jobs = evt.Object;
 			evt.ReturnValue = false;
 
-			foreach (Job job in ViewModel.Model.Intersect (jobs)) {
+			foreach (Job job in ViewModel.Model.Intersect (jobs).ToList ()) {
 				// Remove jobs from the list and add them back to the queue
 				ViewModel.Model.Remove (job);
 				job.State = JobState.Pending;
@@ -196,9 +196,13 @@ namespace VAS.Services
 			videoEditor.Error += OnError;
 
 			foreach (MediaFile file in job.InputFiles) {
-				PlaylistVideo video = new PlaylistVideo (file);
-				Log.Debug ("Convert video " + video.File.FilePath);
-				videoEditor.AddSegment (video.File.FilePath, 0, file.Duration.MSeconds, 1, "", video.File.HasAudio, new Area ());
+				Log.Debug ("Convert video " + file.FilePath);
+				long duration = -1;
+				// VideoEditor has problems with files without audio if we do not specify the duration
+				if (!file.HasAudio) {
+					duration = file.Duration.MSeconds;
+				}
+				videoEditor.AddSegment (file.FilePath, 0, duration, 1, "", file.HasAudio, new Area ());
 			}
 
 			videoEditor.Start ();

@@ -459,11 +459,11 @@ namespace VAS.DB
 
 		protected virtual void InitializeDocumentTypeMappings ()
 		{
-			Dictionary<Type, string> typesToDocumentTypes = new Dictionary<Type, string> ();
 			foreach (IQueryView view in views.Values) {
-				typesToDocumentTypes.Add (view.Type, view.DocumentType);
+				if (!DocumentsSerializer.DocumentTypeBaseTypes.ContainsKey (view.Type)) {
+					DocumentsSerializer.DocumentTypeBaseTypes.Add (view.Type, view.DocumentType);
+				}
 			}
-			DocumentsSerializer.DocumentTypeBaseTypes = typesToDocumentTypes;
 		}
 
 		void AddDirectoryFilesToTar (TarArchive tarArchive, string sourceDirectory, bool recurse)

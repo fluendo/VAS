@@ -98,6 +98,7 @@ namespace VAS.Tests.DB
 	{
 		Database db;
 		IStorage storage;
+		string dbPath;
 
 		[SetUp]
 		public void InitDB ()
@@ -105,7 +106,7 @@ namespace VAS.Tests.DB
 			Directory.SetCurrentDirectory (TestContext.CurrentContext.TestDirectory);
 			string tmpPath = Path.GetTempPath ();
 			string homePath = Path.Combine (tmpPath, "VAS");
-			string dbPath = Path.Combine (homePath, "db");
+			dbPath = Path.Combine (homePath, "db");
 			if (Directory.Exists (dbPath)) {
 				Directory.Delete (dbPath, true);
 			}
@@ -563,6 +564,22 @@ namespace VAS.Tests.DB
 			Assert.AreEqual (ev, playlistElementRetrieved.Play);
 			Assert.AreEqual (playlistElement.CamerasConfig, playlistElementRetrieved.CamerasConfig);
 			Assert.AreEqual (playlistElement.Rate, playlistElementRetrieved.Rate);
+		}
+
+		[Test]
+		public void Store_NewDB_DocumentTypesNotReset ()
+		{
+			DocumentsSerializer.DocumentTypeBaseTypes.Add (typeof (IStorable), "IStorableView");
+
+			string newDBPath = dbPath + "2";
+			var otherStorage = new DummyCouchbaseStorage (newDBPath, "test-db2");
+
+			Assert.Contains (typeof (IStorable), DocumentsSerializer.DocumentTypeBaseTypes.Keys);
+
+			DocumentsSerializer.DocumentTypeBaseTypes.Remove (typeof (IStorable));
+			if (Directory.Exists (newDBPath)) {
+				Directory.Delete (newDBPath, true);
+			}
 		}
 	}
 }

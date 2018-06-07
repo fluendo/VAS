@@ -99,7 +99,7 @@ namespace VAS.Tests.DB
 		Database db;
 		IStorage storage;
 
-		[OneTimeSetUp]
+		[SetUp]
 		public void InitDB ()
 		{
 			Directory.SetCurrentDirectory (TestContext.CurrentContext.TestDirectory);
@@ -143,21 +143,10 @@ namespace VAS.Tests.DB
 				System.IO.Directory.CreateDirectory (App.Current.TempVideosDir);
 		}
 
-		[OneTimeTearDown]
-		public void DeleteDB ()
-		{
-			Directory.Delete (db.Manager.Directory, true);
-		}
-
 		[TearDown]
 		public void CleanDB ()
 		{
-			db.RunInTransaction (() => {
-				foreach (var d in db.CreateAllDocumentsQuery ().Run ()) {
-					db.GetDocument (d.DocumentId).Delete ();
-				}
-				return true;
-			});
+			Directory.Delete (db.Manager.Directory, true);
 		}
 
 		[Test]

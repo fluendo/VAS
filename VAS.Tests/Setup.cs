@@ -46,7 +46,7 @@ namespace VAS.Tests
 			App.InitDependencies ();
 			App.Current.Config = new ConfigDummy ();
 			SynchronizationContext.SetSynchronizationContext (new MockSynchronizationContext ());
-			App.Current.DependencyRegistry.Register<IStorageManager, CouchbaseManager> (1);
+			App.Current.DependencyRegistry.Register<IStorageManager, DummyCouchbaseManager> (1);
 			App.Current.DependencyRegistry.Register<IStopwatch, Stopwatch> (1);
 			App.Current.DependencyRegistry.Register<ITimer, Timer> (1);
 			App.Current.Dialogs = new Mock<IDialogs> ().Object;

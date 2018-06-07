@@ -67,8 +67,15 @@ namespace VAS.DB
 		void Init ()
 		{
 			views = new Dictionary<Type, object> ();
+			if (Log.VerboseDebugging) {
+				Couchbase.Lite.Util.Log.Domains.Database.Level = Couchbase.Lite.Util.Log.LogLevel.Verbose;
+				Couchbase.Lite.Util.Log.Domains.Discovery.Level = Couchbase.Lite.Util.Log.LogLevel.Verbose;
+				Couchbase.Lite.Util.Log.Domains.Query.Level = Couchbase.Lite.Util.Log.LogLevel.Verbose;
+				Couchbase.Lite.Util.Log.Domains.View.Level = Couchbase.Lite.Util.Log.LogLevel.Verbose;
+				Couchbase.Lite.Util.Log.ScrubSensitivity = Couchbase.Lite.Util.LogScrubSensitivity.AllOK;
+			}
 			// Only keep one revision for each document until we support replication and can handle conflicts
-			db.SetMaxRevTreeDepth (1);
+			db.SetMaxRevTreeDepth (0);
 			mutex = new object ();
 			FetchInfo ();
 			BackupAndCompactIfNeeded ();

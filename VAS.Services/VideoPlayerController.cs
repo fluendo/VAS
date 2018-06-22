@@ -847,6 +847,7 @@ namespace VAS.Services
 		public virtual void DrawFrame ()
 		{
 			// FIXME: Drawing tool could use IPlaylistEventElement
+			Pause (true);
 			TimelineEvent evt = loadedEvent ?? (loadedPlaylistElement as PlaylistPlayElement)?.Play;
 			App.Current.EventsBroker.Publish (
 				new DrawFrameEvent {

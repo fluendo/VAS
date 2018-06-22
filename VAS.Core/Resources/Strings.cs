@@ -35,5 +35,7 @@ namespace VAS.Core.Resources
 		public static string Monitor => Catalog.GetString ("Monitor");
 		public static string UpgradeNow => Catalog.GetString ("Upgrade now");
 		public static string Preferences => Catalog.GetString ("Preferences");
+
+		public static string UnknownError => Catalog.GetString ("Unknown error");
 	}
 }
